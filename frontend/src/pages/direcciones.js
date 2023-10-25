@@ -60,6 +60,8 @@ function direcciones (){
 
             <Footer/>
        </div>
+       </div>
+
     );
 
 }
