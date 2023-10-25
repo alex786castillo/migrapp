@@ -1,6 +1,6 @@
 import React from "react";
-import Menu from "../componentes/menu";
-import Footer from "../componentes/footer"
+import Menu from "../Componentes/menu";
+import Footer from "../Componentes/footer"
 import Camion from "../images/camión.jpg"
 import Migracion from "../images/migracion1.jpg"
 import Oscura from "../images/oscura.jpg"
@@ -22,13 +22,13 @@ function Inicio (){
 
                 <div class="carousel-inner">
                 
-                    <div class="carousel-item active" data-bs-interval="2000">
+                    <div class="carousel-item active" data-bs-interval="5000">
                     <img src={Camion} class="d-block w-100" alt="gatito"/>
                     </div>
-                    <div class="carousel-item" data-bs-interval="2000">
+                    <div class="carousel-item" data-bs-interval="5000">
                     <img src= {Migracion} class="d-block w-100" alt="hamburguesa"/>
                     </div>
-                    <div class="carousel-item">
+                    <div class="carousel-item">x    
                     <img src={Oscura} class="d-block w-100" alt="salchipapas"/>
                     </div>
                 </div>

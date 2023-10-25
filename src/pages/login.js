@@ -1,12 +1,12 @@
 import React from "react";
-import Menu from "../componentes/menu"
-import Footer from "../componentes/footer"
+import Menu from "../Componentes/menu"
+import Footer from "../Componentes/footer"
 import "../styles/login.css"
 
 function login (){
     return(
         <div>
-            <Menu/>
+           
             <br/>
 
             <div class="card">
@@ -38,7 +38,7 @@ function login (){
             
             <br/>
             <br/>
-            <Footer/>   
+           <Footer/> 
         </div> 
     );
 }

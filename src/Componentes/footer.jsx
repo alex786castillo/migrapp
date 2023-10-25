@@ -1,8 +1,10 @@
 import React from 'react';
+import '../styles/chequeos.css'
+
 
 function Footer (){
     return(
-        <div className='Footer'>
+        <div className='Footer bg-gray' >
             <div class="card text-center">
                 <div class="card-header">
                     Somos MigrApp
