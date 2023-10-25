@@ -8,7 +8,7 @@ function direcciones (){
         
        <div>
             <Menu/>
-            <div className="body2">
+            <div className="body2 p-4">
             <br/>
             <div class="d-block col-md-7 ms-3"  >
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -56,12 +56,10 @@ function direcciones (){
             </div>       
 
              <br/>
-             <div/>
+             </div>
 
             <Footer/>
        </div>
-       </div>
-
     );
 
 }
