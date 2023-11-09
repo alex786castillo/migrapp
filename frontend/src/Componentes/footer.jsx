@@ -1,8 +1,9 @@
 import React from 'react';
+import "../styles/chequeos.css"
 
 function Footer (){
     return(
-        <div className='Footer'>
+        <div className='Footer navbar-1 '>
             <div class="card text-center">
                 <div class="card-header">
                     Somos MigrApp

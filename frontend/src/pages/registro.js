@@ -21,7 +21,7 @@ function Registro(){
                   setMiregistro("true");
                   console.log(response);
                   alert("Bienvenido")
-                  document.getElementById("Login").style.display = "none";
+                  document.getElementById("formularioR").style.display = "none";
                 }
                 else{
                   setMiregistro("false");
@@ -38,7 +38,6 @@ function Registro(){
       }
 
     function iniciarsesion (e){
-        e.preventDefault();
         var txtnom = document.getElementById("txtnom").value;
         var txtapll = document.getElementById("txtapll").value;
         var txtcorr = document.getElementById("txtcorr").value;
@@ -50,13 +49,16 @@ function Registro(){
         }else{
             var res = peticionPost (txtnom, txtapll, txtcorr, txtcon)
             console.log("res -->",res)
+            e.preventDefault();
+
         }
     }
     
     
     return(
         <div className="signup template d-flex justify-content-center align-items-center vh-100">
-        <div className="form-container p-5 rounded bg-white">
+         <div className="form-container p-5 rounded bg-white " id="formularioR">
+
             <form>
                 <h3 className="text-center">Registrarse</h3>
                 
@@ -85,10 +87,11 @@ function Registro(){
                 </div>
             </form>
             <p className="text-end mt-2">
-                Ya te resgistraste? <Link to="/login" className="ms-2">Iniciar sesión</Link>
+                Ya te resgistraste? <Link to="/" className="ms-2">Iniciar sesión</Link>
             </p>
         </div>
 
+        {miRegistro === "true" && <Inicio/> }
     </div> 
     );
 }

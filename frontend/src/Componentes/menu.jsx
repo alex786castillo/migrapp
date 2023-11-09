@@ -1,9 +1,10 @@
 import React from "react";
+import "../styles/chequeos.css"
 
 function menu (){
     return(
-        <div classname = 'menu' >
-                        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div classname = 'menu ' >
+                        <nav class="navbar navbar-1 navbar-expand-lg">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">MigrApp</a>
 
@@ -15,22 +16,17 @@ function menu (){
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     
                     <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Recuersos humanos</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Chequeos de docs.</a>
+                    <a class="nav-link active" aria-current="page" href="http://localhost:3000/chequeos">Chequeos</a>
                     </li>
 
                     <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Perfil</a>
+                    <a class="nav-link active" aria-current="page" href="http://localhost:3000/direcciones">Direcciones</a>
                     </li>
-                    
-                   
+
+                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="http://localhost:3000/">Cerrar sesión</a>
+                    </li>
+                
                 </ul>
                 <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search"/>

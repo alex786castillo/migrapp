@@ -1,91 +1,70 @@
-import React, {useState} from "react";
-import {Link} from 'react-router-dom'
-import "../styles/login.css"
-import Inicio from "../pages/inicio";
-import axios from "axios";
- 
+import React, { useState } from "react";
+import { Link, useNavigate } from 'react-router-dom'; // Importa Link y useNavigate desde React Router
+import "../styles/login.css";
 
-function Login (){
+function Login() {
+  const [txtusu, setUsu] = useState("");
+  const [txtpas, setPas] = useState("");
 
-    const[miLogin, setMiLogin] = useState ("false");
-    const[usu, setUsu] = useState ("");
-    const[pas, setPas] = useState ("");
+  const navigate = useNavigate(); // Utiliza useNavigate para la redirección
 
-    async function peticionPost(txtusu,txtpas){
-        console.log("usu y tel ->",txtusu,txtpas);
-        await axios.post('http://localhost:4001/api/usuarios/autenticacion',[txtusu,txtpas])
-            .then(response =>{
-                if(response){
-                    setMiLogin("true");
-                    console.log(response);
-                    document.getElementById("Login").style.display = "none";
-                }
-                else{
-                    setMiLogin("false");
-                    alert("Hay un error en alguno de los campos");
-                    document.getElementById("txtusu").value= "";
-                    document.getElementById("txtpas").value= "";
-                    document.getElementById("txtusu").focus();
-                }
-            }).catch(error =>{
-                console.log(error.message)
-            })
+  function inico() {
+    if (txtusu.length > 0 && txtpas.length > 0) {
+      // Si ambos campos tienen contenido, redirecciona
+      navigate("/chequeos");
+    } else {
+      alert("Complete los campos vacíos!!");
     }
+  }
 
-
-
-    function iniciarsesion (e){
-        e.preventDefault();
-        var txtusu = document.getElementById("txtusu").value;
-        var txtpas = document.getElementById("txtpas").value;
-        console.log(txtusu, txtpas,);
-
-        if(txtusu.leng === 0 || txtpas.length===0 ){
-            alert("Complete los campos vacíos!!");
-        }else{
-            if(usu === "hola@gmail.com" && pas==="123"){
-                setMiLogin("true");
-                var res = peticionPost(txtusu,txtpas)
-                console.log("res -->",res)
-            }
-        }
-
-    }
-
-
-    return(
-        <div>
-        <div id="login" className="login template d-flex justify-content-center align-items-center vh-100 ">
-            <div className="form-container p-5 rounded bg-white">
-                <form>
-                    <h3 className="text-center">Iniciar sesión</h3>
-                    <div className="mb-2">
-                        <label htmlFor="email">Correo</label>
-                        <input type="email" placeholder='Ingresar correo' id="txtusu" className='form-control' onChange={(e)=>setUsu(e.target.value)} required></input>
-                    </div>
-
-                    <div className="mb-2">
-                        <label htmlFor="password">Contraseña</label>
-                        <input type="password" id="txtpas" placeholder='Ingresar contraseña' className='form-control'  onChange={(e)=>setPas(e.target.value)} required ></input>
-                    </div>
-                    <div className="mb-2">
-                        <input type="checkbox" className='custom-botton custom-checkbox' id="check"></input>
-                        <label htmlFor="check" className='custom-input-label ms-2'>
-                            Recordar usuario y contraseña
-                        </label>
-                    </div>
-                    <div className='d-grid'>
-                        <button className="btn btn-primary" onClick={iniciarsesion} >Iniciar sesión</button>
-                    </div>
-                </form>
-                <p className="text-end mt-2">
-                    Olvidaste tu <a href="">Contraseña?</a> <Link to="/registro" className="ms-2">Registrarse</Link>
-                </p>
+  return (
+    <div>
+      <div id="login" className="login template d-flex justify-content-center align-items-center vh-100">
+        <div className="form-container p-5 rounded bg-white">
+          <form>
+            <h3 className="text-center">Iniciar sesión</h3>
+            <div className="mb-2">
+              <label htmlFor="email">Correo</label>
+              <input
+                type="email"
+                placeholder="Ingresar correo"
+                id="txtusu"
+                className="form-control"
+                onChange={(e) => setUsu(e.target.value)}
+                required
+              ></input>
             </div>
-            { miLogin === "true" && <Inicio/> }
-        </div> 
+
+            <div className="mb-2">
+              <label htmlFor="password">Contraseña</label>
+              <input
+                type="password"
+                id="txtpas"
+                placeholder="Ingresar contraseña"
+                className="form-control"
+                onChange={(e) => setPas(e.target.value)}
+                required
+              ></input>
+            </div>
+            <div className="mb-2">
+              <input type="checkbox" className="custom-botton custom-checkbox" id="check"></input>
+              <label htmlFor="check" className="custom-input-label ms-2">
+                Recordar usuario y contraseña
+              </label>
+            </div>
+            <div className='d-grid'>
+              <button className="btn btn-primary" onClick={inico}>Iniciar sesión</button>
+            </div>
+          </form>
+          <p className="text-end mt-2">
+            Olvidaste tu <a href="">Contraseña?</a> <Link to="/registro" className="ms-2">
+              Registrarse
+            </Link>
+          </p>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default Login;
