@@ -12,7 +12,7 @@ function Login() {
   async function peticionPost(txtusu, txtpas) {
     console.log("usu y tel ->", txtusu, txtpas);
     try {
-      const response = await axios.post('http://localhost:4001/api/usuarios/autenticacion', { correo: txtusu, contraseña: txtpas });
+      const response = await axios.post('https://migrapp-dqx9.vercel.app/api/usuarios/autenticacion', { correo: txtusu, contraseña: txtpas });
       console.log("Respuesta del servidor:", response.data);
 
       if (response.data.mensaje === 'Usuario autenticado correctamente') {
