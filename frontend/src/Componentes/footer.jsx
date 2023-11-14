@@ -4,14 +4,14 @@ import "../styles/chequeos.css"
 function Footer (){
     return(
         <div className='Footer navbar-1 '>
-            <div class="card text-center">
-                <div class="card-header">
+            <div className="card text-center">
+                <div className="card-header">
                     Somos MigrApp
                 </div>
-                <div class="card-body">
-                <h5 class="card-title">Una aplicación para ti y para mi como personas </h5>
-                <p class="card-text">Para más información de contacto dar click en: </p>
-                <a href="#" class="btn btn-primary">Aquí</a>
+                <div className="card-body">
+                <h5 className="card-title">Una aplicación para ti y para mi como personas </h5>
+                <p className="card-text">Para más información de contacto dar click en: </p>
+                <a href="#" className="btn btn-primary">Aquí</a>
                 </div>
             </div>
 
