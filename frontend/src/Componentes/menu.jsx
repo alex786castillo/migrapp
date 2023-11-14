@@ -32,7 +32,7 @@ function menu (){
                     </li>
 
                     <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="http://localhost:3000/">Cerrar sesión</a>
+                    <a className="nav-link active" aria-current="page" href="https://migrapp.vercel.app/">Cerrar sesión</a>
                     </li>
                 
                 </ul>
