@@ -22,12 +22,26 @@ function direcciones (){
                 <div class="collapse" id="collapseExample">
                 <div class="card card-body">
                         <div class="list-group" >
-                        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                        <a  class="list-group-item list-group-item-action active" aria-current="true">
                             Direcciones de insumos
                         </a>
+
+                        <p class="Direccion 1 list-group-item-action">Minorista (Calle 55 A #57-80 Plaza, Medellin 050010 Colombia)</p>
+                        <br/>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.881749577929!2d-75.62059332581885!3d6.279273525954923!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e4429584b6c1809%3A0x488646a893648508!2sIE%20Lusitania%20Paz%20De%20Colombia!5e0!3m2!1ses-419!2sco!4v1699915259447!5m2!1ses-419!2sco" style={{border:0}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <br/>
+                        <p class="Direccion 2 list-group-item-action" style={{color: "black"}}>Integrate</p>
+                        <br/>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.071030146206!2d-75.56512112910579!3d6.254372512409262!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e4429a5cea7b1f1%3A0x7f908df886e56f09!2sIntegrate%20Medellin!5e0!3m2!1ses-419!2sco!4v1699916235293!5m2!1ses-419!2sco" style={{border:0}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <br/>
+                        <a class="Direccion 3 list-group-item-action">Centro de insumos 3</a>
+                        <br/>
+                        
+
                         <a href="https://www.google.com/maps/search/Plaza+Minorista+Calle+55+A+%2357-80+Plaza,+Medellin+050010+Colombia/@6.2558549,-75.5700234,17z/data=!3m1!4b1?entry=ttu" class="Direccion 1 list-group-item-action">Minorista (Calle 55 A #57-80 Plaza, Medellin 050010 Colombia)</a>
                         <a href="#" class="Direccion 2 list-group-item-action">Centro de insumo 2</a>
                         <a href="#" class="Direccion 3 list-group-item-action">Centro de insumos 3</a>
+
                     </div>
                 </div>
                 </div>
@@ -47,7 +61,7 @@ function direcciones (){
                         </a>
                         <a href="#" class="list-group-item list-group-item-action">Americares ()</a>
                         <a href="#" class="list-group-item list-group-item-action">A third link item</a>
-                        <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+                        
                        
                     </div>
                 </div>
