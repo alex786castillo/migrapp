@@ -1,12 +1,15 @@
 import React from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Login from '../pages/login';
 import Inicio from '../pages/inicio';
 import Registro from "../pages/registro";
 import Chequeos from "../pages/chequeos";
 import Direcciones from "../pages/direcciones";
 import Documentos from "../pages/documentos"
+
 import Perfil from "../pages/perfil"
+
+import Login from "../pages/login"
+
 
 function App() {
   return (
