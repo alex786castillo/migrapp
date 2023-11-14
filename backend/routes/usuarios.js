@@ -14,7 +14,7 @@ router.get('/', (req, res)=>{
 });
 
 
-
+    
 router.post('/autenticacion', (req, res)=>{
     const txtusu= req.body[0];
     const txtpas = req.body[1];
@@ -38,28 +38,30 @@ router.post('/autenticacion', (req, res)=>{
 })
 
 
-router.post('/registro', (req,res)=>{
-    console.log(req.body)
-    const nombre = req.body[0]
-    const apellido = req.body[1]
-    const correo = req.body[2]
-    const contraseña = req.body[3]
+router.post('/registro', (req, res) => {
+    console.log(req.body);
+    const nombre = req.body[0];
+    const apellido = req.body[1];
+    const correo = req.body[2];
+    const contraseña = req.body[3];
 
-    let usuario = [nombre,apellido,correo,contraseña]
+    let usuario = [nombre, apellido, correo, contraseña];
 
-    let nuevoUsuario = `INSERT INTO usuarios(nombre, apellido, Correo, Contraseña) 
-    VALUES(?, ?, ?, SHA1(?))
-`;
+    let nuevoUsuario = `
+        INSERT INTO usuarios(nombre, apellido, Correo, Contraseña) 
+        VALUES (?, ?, ?, SHA1(?))
+    `;
 
     mysqlConnection.query(nuevoUsuario, usuario, (err, results, fields) => {
         if (err) {
-            return console.error(err.message);
+            console.error(err.message);
+            return res.status(500).json({ message: 'Error al registrar el usuario' });
         } else {
-            res.json({ message: `Se ha registrado otro usuario` })
-    }
+            res.json({ message: `Se ha registrado otro usuario` });
+        }
+    });
 });
 
-});
 
 
 router.post('/', (req, res)=>{

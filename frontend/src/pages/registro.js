@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom'
+import {Link, Navigate} from 'react-router-dom'
 import "../styles/login.css"
 import axios from 'axios';
 import Inicio from './inicio';
 
 function Registro(){
 
-    const[miRegistro, setMiregistro] = useState ("false");
+    const [miRegistro, setMiregistro] = useState("false");
     const[nom, setNom] = useState ("");
     const[apell, setApell] = useState ("");
     const[corr, setCorr] = useState ("");
@@ -94,7 +94,7 @@ function Registro(){
             </p>
         </div>
 
-        {miRegistro === "true" && <Inicio/> }
+        {miRegistro === "true" && <Navigate to="/inicio" />}
     </div> 
     );
 }

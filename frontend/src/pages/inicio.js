@@ -7,6 +7,7 @@ function Inicio (){
     return(
         <div>
             <Menu/>
+            
             <Home/>
 
             <Footer/>
