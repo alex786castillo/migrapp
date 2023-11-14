@@ -37,22 +37,25 @@ function Registro(){
             })
       }
 
-    function iniciarsesion (e){
+      function iniciarsesion(e) {
+
+        e.preventDefault();
+        console.log("Iniciando sesión...");
+
         var txtnom = document.getElementById("txtnom").value;
         var txtapll = document.getElementById("txtapll").value;
         var txtcorr = document.getElementById("txtcorr").value;
         var txtcon = document.getElementById("txtcon").value;
         
-        if(txtnom.lenght === 0 || txtapll.length===0 || txtcorr.length===0 || txtcon.length===0 ){
-            alert("Complete los campos vacíos!!")
-
-        }else{
-            var res = peticionPost (txtnom, txtapll, txtcorr, txtcon)
-            console.log("res -->",res)
+        if (txtnom.length === 0 || txtapll.length === 0 || txtcorr.length === 0 || txtcon.length === 0) {
+            alert("Complete los campos vacíos!!");
+        } else {
+            var res = peticionPost(txtnom, txtapll, txtcorr, txtcon);
+            console.log("res -->", res);
             e.preventDefault();
-
         }
     }
+    
     
     
     return(

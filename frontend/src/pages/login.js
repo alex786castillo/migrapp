@@ -1,35 +1,39 @@
 import React, { useState } from "react";
-import { Link, Redirect } from 'react-router-dom';
-import "../styles/login.css";
-import Inicio from "../pages/inicio";
+import { Link, Navigate } from 'react-router-dom';
+import "../styles/login.css"
+import Inicio from "../pages/inicio"
 import axios from "axios";
 
 function Login() {
+
   const [miLogin, setMiLogin] = useState(false);
   const [usu, setUsu] = useState("");
   const [pas, setPas] = useState("");
 
   async function peticionPost(txtusu, txtpas) {
     console.log("usu y tel ->", txtusu, txtpas);
-    try {
-      const response = await axios.post('http://localhost:4001/api/usuarios/autenticacion', [txtusu, txtpas]);
-      if (response.data) {
-        setMiLogin(true);
-        console.log(response);
-      } else {
-        alert("Hay un error en alguno de los campos");
-        setUsu("");
-        setPas("");
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+    await axios.post('http://localhost:4001/api/usuarios/autenticacion', [txtusu, txtpas])
+      .then(response => {
+        if (response) {
+          setMiLogin(true);
+          console.log(response);
+          document.getElementById("login").style.display = "none";
+        } else {
+          setMiLogin(false);
+          alert("Hay un error en alguno de los campos");
+          document.getElementById("txtusu").value = "";
+          document.getElementById("txtpas").value = "";
+          document.getElementById("txtusu").focus();
+        }
+      }).catch(error => {
+        console.log(error.message)
+      })
   }
 
   function iniciarsesion(e) {
     e.preventDefault();
-    var txtusu = usu;
-    var txtpas = pas;
+    var txtusu = document.getElementById("txtusu").value;
+    var txtpas = document.getElementById("txtpas").value;
     console.log(txtusu, txtpas);
 
     if (txtusu.length === 0 || txtpas.length === 0) {
@@ -37,6 +41,7 @@ function Login() {
     } else {
       if (txtusu === "hola@gmail.com" && txtpas === "123") {
         setMiLogin(true);
+        document.getElementById("login").style.display = "none";
         var res = peticionPost(txtusu, txtpas);
         console.log("res -->", res);
       }
@@ -56,7 +61,6 @@ function Login() {
                 placeholder="Ingresar correo"
                 id="txtusu"
                 className="form-control"
-                value={usu}
                 onChange={(e) => setUsu(e.target.value)}
                 required
               ></input>
@@ -69,7 +73,6 @@ function Login() {
                 id="txtpas"
                 placeholder="Ingresar contraseña"
                 className="form-control"
-                value={pas}
                 onChange={(e) => setPas(e.target.value)}
                 required
               ></input>
@@ -91,7 +94,7 @@ function Login() {
           </p>
         </div>
       </div>
-      {miLogin && <Redirect to="/inicio" />}
+      {miLogin && <Navigate to="/inicio" />}
     </div>
   );
 }
