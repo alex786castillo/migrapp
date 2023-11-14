@@ -5,9 +5,7 @@ import Registro from "../pages/registro";
 import Chequeos from "../pages/chequeos";
 import Direcciones from "../pages/direcciones";
 import Documentos from "../pages/documentos"
-
 import Perfil from "../pages/perfil"
-
 import Login from "../pages/login"
 
 
@@ -21,15 +19,7 @@ function App() {
       <Route exact path = '/chequeos' element ={<Chequeos/>}/>
       <Route exact path = '/direcciones' element ={<Direcciones/>}/>
       <Route exact path = '/documentos' element ={<Documentos/>}/>
-      <Route exact path = '/perfil' element ={<Perfil/>}/>
-
-
-
-
-
-
-
-      
+      <Route exact path = '/perfil' element ={<Perfil/>}/>      
     </Routes>
    </Router>
   );

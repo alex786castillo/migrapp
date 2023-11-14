@@ -47,16 +47,18 @@ router.post('/registro', (req,res)=>{
 
     let usuario = [nombre,apellido,correo,contraseña]
 
-    let nuevoUsuario = `INSERT INTO usuarios( Correo, Contraseña, nombre, apellido) 
-    VALUES( ?, SHA1(?),?,?,)`;
+    let nuevoUsuario = `INSERT INTO usuarios(nombre, apellido, Correo, Contraseña) 
+    VALUES(?, ?, ?, SHA1(?))
+`;
 
-    mysqlConnection.query(nuevoUsuario, usuario, (err, results, fields)=>{
-        if(err){
+    mysqlConnection.query(nuevoUsuario, usuario, (err, results, fields) => {
+        if (err) {
             return console.error(err.message);
-        } else{
-            res.json({message: `se ha registrado otro usuario`})
+        } else {
+            res.json({ message: `Se ha registrado otro usuario` })
         }
-    });
+});
+
 });
 
 
