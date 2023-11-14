@@ -16,11 +16,19 @@ function menu (){
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     
                     <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="http://localhost:3000/inicio">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="http://localhost:3000/chequeos">Chequeos</a>
                     </li>
 
                     <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="http://localhost:3000/direcciones">Direcciones</a>
+                    </li>
+
+                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="http://localhost:3000/perfil">Mi Perfil</a>
                     </li>
 
                     <li class="nav-item">

@@ -9,7 +9,7 @@ const App = () => {
     <div>
     <Menu/>
         <div>
-        <h1>Mi Aplicación</h1>
+        <h2>Mi Perfil</h2>
         <ProfilePage />
         </div>
     <Footer/>
