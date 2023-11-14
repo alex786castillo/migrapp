@@ -54,7 +54,7 @@ router.post('/registro', (req, res) => {
 
   let nuevoUsuario = `
         INSERT INTO usuarios(nombre, apellido, Correo, Contraseña) 
-        VALUES (?, ?, ?, SHA1(?))
+        VALUES (?, ?, ?, ?)
     `;
 
   mysqlConnection.query(nuevoUsuario, usuario, (err, results, fields) => {

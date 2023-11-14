@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/chequeos.css"
+import { Link } from "react-router-dom";
 
 function menu (){
     return(
@@ -32,7 +33,10 @@ function menu (){
                     </li>
 
                     <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="https://migrapp.vercel.app/">Cerrar sesión</a>
+                        <Link to='/'>
+                            Cerrar sesión
+                        </Link>
+                    <a className="nav-link active" aria-current="page" href="https://migrapp.vercel.app/"></a>
                     </li>
                 
                 </ul>
