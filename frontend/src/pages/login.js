@@ -5,29 +5,30 @@ import Inicio from "../pages/inicio"
 import axios from "axios";
 
 function Login() {
-
-  const [miLogin, setMiLogin] = useState(false);  
+  const [miLogin, setMiLogin] = useState(false);
   const [usu, setUsu] = useState("");
   const [pas, setPas] = useState("");
 
   async function peticionPost(txtusu, txtpas) {
     console.log("usu y tel ->", txtusu, txtpas);
-    await axios.post('http://localhost:4001/api/usuarios/autenticacion', [txtusu, txtpas])
-      .then(response => {
-        if (response) {
-          setMiLogin(true);
-          console.log(response);
-          document.getElementById("login").style.display = "none";
-        } else {
-          setMiLogin(false);
-          alert("Hay un error en alguno de los campos");
-          document.getElementById("txtusu").value = "";
-          document.getElementById("txtpas").value = "";
-          document.getElementById("txtusu").focus();
-        }
-      }).catch(error => {
-        console.log(error.message)
-      })
+    try {
+      const response = await axios.post('http://localhost:4001/api/usuarios/autenticacion', { correo: txtusu, contraseña: txtpas });
+      console.log("Respuesta del servidor:", response.data);
+
+      if (response.data.mensaje === 'Usuario autenticado correctamente') {
+        setMiLogin(true);
+        console.log(response.data);
+        document.getElementById("login").style.display = "none";
+      } else {
+        setMiLogin(false);
+        alert("Hay un error en alguno de los campos");
+        document.getElementById("txtusu").value = "";
+        document.getElementById("txtpas").value = "";
+        document.getElementById("txtusu").focus();
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   function iniciarsesion(e) {
@@ -39,12 +40,16 @@ function Login() {
     if (txtusu.length === 0 || txtpas.length === 0) {
       alert("Complete los campos vacíos!!");
     } else {
-      if (txtusu === "hola@gmail.com" && txtpas === "123") {
-        setMiLogin(true);
-        document.getElementById("login").style.display = "none";
-        var res = peticionPost(txtusu, txtpas);
-        console.log("res -->", res);
-      }
+      // Se comenta la siguiente línea ya que los datos ahora se envían directamente en la función peticionPost
+      // if (txtusu === "hola@gmail.com" && txtpas === "123") {
+      //   setMiLogin(true);
+      //   document.getElementById("login").style.display = "none";
+      //   var res = peticionPost(txtusu, txtpas);
+      //   console.log("res -->", res);
+      // }
+
+      // Se llama directamente a la función peticionPost con los datos del formulario
+      peticionPost(txtusu, txtpas);
     }
   }
 
