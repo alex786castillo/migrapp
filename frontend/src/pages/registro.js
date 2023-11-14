@@ -15,7 +15,7 @@ function Registro(){
 
     async function peticionPost(txtnom,txtapll,txtcorr,txtcon) {
         console.log("nom apell corr con -->", txtnom, txtapll, txtcorr, txtcon);
-        await axios.post('http://localhost:4001/api/usuarios/registro', [txtnom, txtapll, txtcorr, txtcon])
+        await axios.post('https://migrapp-dqx9.vercel.app/api/usuarios/registro', [txtnom, txtapll, txtcorr, txtcon])
             .then(response => { 
                 if(response){
                   setMiregistro("true");
