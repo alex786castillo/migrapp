@@ -56,7 +56,7 @@ router.post('/registro', (req,res)=>{
             return console.error(err.message);
         } else {
             res.json({ message: `Se ha registrado otro usuario` })
-        }
+    }
 });
 
 });
