@@ -1,107 +1,106 @@
-import React, { useState } from "react";
-import { Link, Navigate } from 'react-router-dom';
-
-
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Spinner } from "react-bootstrap";
 import api from "../services/api";
+import AccesoForm from "../components/AccesoForm";
+import Campo from "../components/Campo";
 
-function Login() {
-  const [miLogin, setMiLogin] = useState(false);
-  const [usu, setUsu] = useState("");
-  const [pas, setPas] = useState("");
+// POST /api/usuarios/autenticacion
+//   cuerpo  { correo, contraseña }
+//   exito   200 { mensaje }
+//   fallo   401 { mensaje }   <- axios lanza excepcion, hay que capturarla
+export default function Login() {
+  const navegar = useNavigate();
+  const [correo, setCorreo] = useState("");
+  const [contrasena, setContrasena] = useState("");
+  const [error, setError] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
-  async function peticionPost(txtusu, txtpas) {
-    console.log("usu y tel ->", txtusu, txtpas);
-    try {
-      const response = await api.post('/usuarios/autenticacion', { correo: txtusu, contraseña: txtpas });
-      console.log("Respuesta del servidor:", response.data);
-
-      if (response.data.mensaje === 'Usuario autenticado correctamente') {
-        setMiLogin(true);
-        console.log(response.data);
-        document.getElementById("login").style.display = "none";
-      } else {
-        setMiLogin(false);
-        alert("Hay un error en alguno de los campos");
-        document.getElementById("txtusu").value = "";
-        document.getElementById("txtpas").value = "";
-        document.getElementById("txtusu").focus();
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  function iniciarsesion(e) {
+  async function enviar(e) {
     e.preventDefault();
-    var txtusu = document.getElementById("txtusu").value;
-    var txtpas = document.getElementById("txtpas").value;
-    console.log(txtusu, txtpas);
+    setError("");
 
-    if (txtusu.length === 0 || txtpas.length === 0) {
-      alert("Complete los campos vacíos!!");
-    } else {
-      // Se comenta la siguiente línea ya que los datos ahora se envían directamente en la función peticionPost
-      // if (txtusu === "hola@gmail.com" && txtpas === "123") {
-      //   setMiLogin(true);
-      //   document.getElementById("login").style.display = "none";
-      //   var res = peticionPost(txtusu, txtpas);
-      //   console.log("res -->", res);
-      // }
+    if (!correo.trim() || !contrasena) {
+      setError("Completa el correo y la contraseña.");
+      return;
+    }
 
-      // Se llama directamente a la función peticionPost con los datos del formulario
-      peticionPost(txtusu, txtpas);
+    setEnviando(true);
+    try {
+      const { data } = await api.post("/usuarios/autenticacion", {
+        correo,
+        contraseña: contrasena,
+      });
+      // El backend responde 200 solo cuando las credenciales son correctas.
+      if (data.mensaje === "Usuario autenticado correctamente") {
+        navegar("/");
+      } else {
+        setError(data.mensaje || "No pudimos iniciar sesión.");
+      }
+    } catch (e) {
+      // Antes este catch solo hacia console.log: una contraseña incorrecta
+      // (401) no mostraba absolutely nada al usuario.
+      const msg = e.response?.data?.mensaje;
+      setError(
+        msg ||
+          (e.response
+            ? "No pudimos iniciar sesión. Intenta de nuevo."
+            : "No hay conexión con el servidor. Revisa tu internet.")
+      );
+    } finally {
+      setEnviando(false);
     }
   }
 
   return (
-    <div>
-      <div id="login" className="d-flex justify-content-center"><div style={{ maxWidth: 420, width: "100%" }}>
-        <div className="p-4 border rounded bg-white w-100">
-          <form>
-            <h3 className="text-center">Iniciar sesión</h3>
-            <div className="mb-2">
-              <label htmlFor="email">Correo</label>
-              <input
-                type="email"
-                placeholder="Ingresar correo"
-                id="txtusu"
-                className="form-control"
-                onChange={(e) => setUsu(e.target.value)}
-                required
-              ></input>
-            </div>
-
-            <div className="mb-2">
-              <label htmlFor="password">Contraseña</label>
-              <input
-                type="password"
-                id="txtpas"
-                placeholder="Ingresar contraseña"
-                className="form-control"
-                onChange={(e) => setPas(e.target.value)}
-                required
-              ></input>
-            </div>
-            <div className="mb-2">
-              <input type="checkbox" className="custom-botton custom-checkbox" id="check"></input>
-              <label htmlFor="check" className="custom-input-label ms-2">
-                Recordar usuario y contraseña
-              </label>
-            </div>
-            <div className='d-grid'>
-              <button className="btn btn-primary" onClick={iniciarsesion}>Iniciar sesión</button>
-            </div>
-          </form>
-          <p className="text-end mt-2">
-            ¿No tienes cuenta? <Link to="/registro" className="ms-2">
-              Registrarse
-            </Link>
-          </p>
+    <AccesoForm
+      titulo="Iniciar sesión"
+      error={error}
+      pie={
+        <>
+          ¿No tienes cuenta? <Link to="/registro">Registrarse</Link>
+        </>
+      }
+    >
+      <form onSubmit={enviar} noValidate>
+        <Campo
+          id="correo"
+          etiqueta="Correo"
+          type="email"
+          value={correo}
+          onChange={(e) => setCorreo(e.target.value)}
+          placeholder="tucorreo@ejemplo.com"
+          autoComplete="email"
+          autoFocus
+        />
+        <Campo
+          id="contrasena"
+          etiqueta="Contraseña"
+          type="password"
+          value={contrasena}
+          onChange={(e) => setContrasena(e.target.value)}
+          placeholder="Tu contraseña"
+          autoComplete="current-password"
+        />
+        <div className="acceso-form__pie-boton d-grid">
+          <Button type="submit" disabled={enviando}>
+            {enviando ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  className="me-2"
+                  aria-hidden="true"
+                />
+                Entrando…
+              </>
+            ) : (
+              "Iniciar sesión"
+            )}
+          </Button>
         </div>
-      </div></div>
-      {miLogin && <Navigate to="/" />}
-    </div>
+      </form>
+    </AccesoForm>
   );
 }
-
-export default Login;

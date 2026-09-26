@@ -1,4 +1,1592 @@
-/* Único CSS global de la app. En la fase 2 aquí irán las variables de color y tipografía. */
+/* ==========================================================================
+   MigrApp · hoja de estilos unica
+   ==========================================================================
+
+   Este archivo es la UNICA fuente de estilo de la app. No hay estilos en los
+   .jsx: ni classNames de Bootstrap sueltos, ni style={{}}. Si algo necesita
+   un color, una medida o un ritmo, sale de la seccion 1 (tokens).
+
+   ORDEN DE LAS SECCIONES — no las muevas sin revisar las dependencias:
+     1. Tokens        valores crudos. Nada mas los usa.
+     2. Puente        traduce los tokens a las variables --bs-* de Bootstrap.
+     3. Base          elementos del navegador, foco, accesibilidad.
+     4. Layout        estructura de pagina (skip-link, main, pie).
+     5. Componentes   un bloque por componente, prefijo = nombre del componente.
+     6. Utilidades    clases de una sola linea que no justifican un bloque.
+     7. Motion        animaciones. Se apagan solas con prefers-reduced-motion.
+
+   COMO SE EDITA:
+     - Cambiar el color de la app entera      -> seccion 1, un valor.
+     - Cambiar el aspecto de un componente   -> seccion 5, su bloque.
+     - Ningun valor hexadecimal fuera de la seccion 1. Si necesitas un color
+       nuevo, primero se decide si es un rol (y va a tokens) o un detalle.
+
+   CONVENCION DE NOMBRES: cada componente tiene un prefijo y sus clases
+   derivadas. `.tarjeta-tramite__meta` solo existe dentro de TarjetaTramite.
+   Para encontrar todo el estilo de un componente: grep del prefijo.
+
+   QUE CLASES DE BOOTSTRAP SE USAN Y CUALES NO:
+     - SI: las de disposicion y espaciado (d-flex, gap-2, ms-auto, w-100,
+       row/col, grid). Son el trabajo del framework y son consistentes.
+     - NO: las de color y tipografia (text-muted, bg-light, text-danger,
+       fw-bold, h3, lead, small). Para eso estan los tokens y las utilidades
+       de la seccion 6. Si aparece una en un .jsx, es una fuga de este
+       sistema: se reemplaza por su clase propia.
+
+   Contraste verificado con WCAG 2.1. Los roles de texto pasan AA (>= 4.5:1)
+   sobre --mig-superficie (crema) como sobre el blanco de las tarjetas.
+   La cifra de la izquierda es sobre crema, la de la derecha sobre blanco:
+
+     tinta            9.13 / 11.04
+     apagado          5.07 /  6.14
+     primario         7.19 /  8.70
+     primario-fuerte 12.01 / 14.53
+     exito            6.71 /  8.12
+     peligro          5.02 /  6.07
+     aviso-texto      5.00 /  6.05
+
+   LOS COLORES DE MARCA NO SIRVEN COMO TEXTO, solo como relleno con texto
+   blanco encima: el magenta da 3.74:1 sobre crema, y sobre el amarillo el
+   blanco no llega (1.45:1). Por eso el acento y el aviso tienen ademas su
+   version oscura para usarse como texto. Antes de darle un uso a un color
+   nuevo, comprueba las dos columnas.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. TOKENS
+   ========================================================================== */
+
+:root {
+  /* --- Paleta de marca --------------------------------------------------
+     Los cinco colores del proyecto. Todo lo demas en esta seccion son
+     mezclas de estos, no colores nuevos:
+
+       #1446A0  azul       marca, enlaces, barra de navegacion
+       #DB3069  magenta    acento de marca
+       #F5D547  amarillo   aviso
+       #EBEBD3  crema      fondo de pagina
+       #3C3C3B  tinta      texto
+
+     El verde de exito NO venia en la paleta. Se eligio en H=160, que es el
+     complementario exacto del magenta: el par exito/error se complementa en
+     vez de competir, y a la vez iguala en profundidad al azul (L 0.071).
+     Si se cambia el magenta, este verde tambien deberia moverse. */
+
+  /* --- Marca ---------------------------------------------------------- */
+  --mig-primario: #1446a0;
+  --mig-primario-fuerte: #0b2758; /* hover de enlaces y pulsado de boton */
+  --mig-primario-suave: #e8edf6; /* fondos de subtitulo, chips */
+  --mig-primario-borde: #99acc0;
+
+  /* Acento: SOLO como fondo, jamas como texto. El magenta puro sobre crema
+     da 3.74:1, por debajo del 4.5:1 que exige WCAG AA. Sobre el, el texto
+     tiene que ser blanco (4.53:1). Para texto de acento existe
+     --mig-acento-fuerte (8.19:1 sobre --mig-acento-suave). */
+  --mig-acento: #db3069;
+  --mig-acento-fuerte: #831d3f;
+  --mig-acento-suave: #fbeaf0;
+
+  /* --- Neutros -------------------------------------------------------- */
+  --mig-tinta: #3c3c3b;
+  --mig-apagado: #62625c; /* descripciones, pie, apoyo */
+  --mig-superficie: #ebebd3; /* fondo de pagina. Las tarjetas van en blanco. */
+  --mig-borde: #bbbbaa; /* decorativo: separa, no delimita un control */
+  /* El borde de un campo tiene que llegar a 3:1 (WCAG 1.4.11). Este valor
+     esta calculado contra la CREMA, no contra el blanco: los campos no solo
+     viven sobre tarjetas, y la crema es el de los dos fondos mas oscuro, asi
+     que cumplirla alli cubre los dos casos. Contra crema 3.21, contra
+     blanco 3.88. */
+  --mig-borde-fuerte: #828278;
+  --mig-blanco: #ffffff;
+
+  /* --- Semanticos -----------------------------------------------------
+     Cada estado trae cuatro formas porque no todas sirven para lo mismo:
+       (base)     relleno solido, siempre con texto blanco encima
+       (suave)    fondo tenue de panel, para texto corrido
+       (borde)    linea de 1px que separa el panel de su fondo
+       (-fuerte)  version oscura del relleno, para hover
+
+     EXCEPTO el aviso, que es el unico color claro de la paleta y por eso
+     necesita dos tokens de texto: --mig-aviso para el relleno (con tinta
+     encima, 7.62:1) y --mig-aviso-texto para cuando va sobre crema. */
+
+  --mig-exito: #225946;
+  --mig-exito-fuerte: #1a4335;
+  --mig-exito-suave: #e9eeed;
+  --mig-exito-borde: #a2b9b1;
+
+  --mig-peligro: #b72858;
+  --mig-peligro-fuerte: #902045;
+  --mig-peligro-suave: #fbeaf0;
+  --mig-peligro-borde: #efa2bc;
+
+  --mig-aviso: #f5d547; /* relleno: texto con --mig-tinta, nunca blanco */
+  --mig-aviso-texto: #716221; /* el mismo aviso como texto sobre crema */
+  --mig-aviso-suave: #fae89a;
+  --mig-aviso-borde: #bea743;
+
+  --mig-info: #1446a0;
+  --mig-info-suave: #e8edf6;
+
+  /* --- Tipografia ----------------------------------------------------- */
+  /* Noto Sans para texto, Special Gothic Condensed One para titulos.
+     Ambas stacks caen a una fuente del sistema si Google Fonts no responde,
+     para que el texto nunca quede invisible. */
+  --mig-fuente: "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --mig-fuente-titulo: "Special Gothic Condensed One", "Noto Sans", system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+
+  --mig-texto-xs: 0.8125rem;
+  --mig-texto-sm: 0.9375rem;
+  --mig-texto-base: 1rem;
+  --mig-texto-lg: 1.125rem;
+  --mig-texto-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --mig-texto-2xl: clamp(1.6rem, 1.3rem + 1.1vw, 2.1rem);
+  --mig-texto-3xl: clamp(2rem, 1.5rem + 2vw, 3rem);
+
+  /* 300 para los parrafos. Los pesos 600 y 700 se reservan para la interfaz
+     (botones, etiquetas, cabeceras de tabla), donde si hacen falta. */
+  --mig-peso-normal: 300;
+  --mig-peso-medio: 600;
+  --mig-peso-fuerte: 700;
+
+  /* Special Gothic Condensed One tiene UN solo peso (400). Aplicarle 700
+     haria que el navegador genere una negrita falsa, que en una condensada
+     se ve borrosa. Por eso los titulos van siempre a 400 y la jerarquia la
+     aporta la forma, no el grosor. */
+  --mig-peso-titulo: 400;
+
+  /* Medida de linea: ~70 caracteres, el limite comodo para lectura larga. */
+  --mig-linea: 1.6;
+  --mig-linea-corta: 1.2;
+  --mig-medida: 68ch;
+
+  /* --- Forma ---------------------------------------------------------- */
+  --mig-radio: 0.5rem;
+  --mig-radio-sm: 0.35rem;
+  --mig-radio-lg: 0.75rem;
+  --mig-radio-pill: 50rem;
+
+  --mig-sombra: 0 1px 2px rgb(60 60 59 / 7%), 0 4px 12px rgb(60 60 59 / 9%);
+  --mig-sombra-sm: 0 1px 2px rgb(60 60 59 / 7%);
+  --mig-sombra-lg: 0 4px 8px rgb(60 60 59 / 9%), 0 12px 28px rgb(60 60 59 / 14%);
+
+  /* --- Ritmo ---------------------------------------------------------- */
+  --mig-esp-1: 0.25rem;
+  --mig-esp-2: 0.5rem;
+  --mig-esp-3: 0.75rem;
+  --mig-esp-4: 1rem;
+  --mig-esp-5: 1.5rem;
+  --mig-esp-6: 2rem;
+  --mig-esp-7: 3rem;
+
+  /* Margen lateral del contenido. Un solo token controla el aire de toda la
+     pagina: 16px en movil, ~32px en tablet, 48px en monitor grande. */
+  --mig-gutter: clamp(1rem, 4vw, 3rem);
+
+  /* Tope del bloque de contenido. 1600px llena una pantalla de portatil
+     normal (1440-1728) sin estirar las tarjetas en un ultrawide. Para que
+     sea literalmente el 100% del ancho en cualquier monitor, sube este
+     numero; nada mas depende de el. */
+  --mig-ancho-max: 1600px;
+
+  /* Ancho maximo de los bloques de texto largo. El contenedor puede ocupar
+     1600px, pero una linea de 200 caracteres es ilegible: estos bloques se
+     quedan en una columna comoda y centrada. Sube este token (o ponlo en
+     `none`) si tambien quieres que las fichas ocupen todo el ancho. */
+  --mig-ancho-lectura: 62rem;
+  --mig-alto-nav: 56px;
+
+  /* --- Movimiento ------------------------------------------------------ */
+  --mig-dur-rapida: 140ms;
+  --mig-dur: 220ms;
+  --mig-dur-lenta: 380ms;
+  --mig-curva: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --mig-desplaz-entrada: 12px;
+}
+
+
+/* ==========================================================================
+   2. PUENTE A BOOTSTRAP
+   --------------------------------------------------------------------------
+   Bootstrap 5.3 es 100% dirigido por variables CSS: botones, badges, enlaces,
+   alerts y el estado activo del Nav derivan de estas. Al sobreescribirlas
+   aqui, la paleta se propaga a todos los .jsx sin tocar ninguno.
+   Es lo que hace posible tener UNA sola hoja de estilos sin peleas de
+   especificidad contra el framework.
+   ========================================================================== */
+
+:root {
+  --bs-primary: var(--mig-primario);
+  --bs-primary-rgb: 20, 70, 160;
+  --bs-link-color: var(--mig-primario);
+  --bs-link-hover-color: var(--mig-primario-fuerte);
+
+  --bs-body-bg: var(--mig-superficie);
+  --bs-body-color: var(--mig-tinta);
+  /* Bootstrap pinta `text-muted` con --bs-secondary-color. Apuntar ese token
+     al apagado verificado es lo que evita el 4.40:1 que fallaba antes. */
+  --bs-secondary-color: var(--mig-apagado);
+  --bs-secondary-color-rgb: 98, 98, 92;
+  --bs-secondary-bg: var(--mig-primario-suave);
+
+  --bs-border-color: var(--mig-borde);
+  --bs-border-color-translucent: var(--mig-borde);
+
+  --bs-success: var(--mig-exito);
+  --bs-success-rgb: 34, 89, 70;
+  --bs-danger: var(--mig-peligro);
+  --bs-danger-rgb: 183, 40, 88;
+  --bs-warning: var(--mig-aviso);
+  --bs-info: var(--mig-info);
+  --bs-secondary: var(--mig-apagado);
+
+  /* Los -rgb NO son opcionales. Las clases .bg-* y .text-* de Bootstrap los
+     usan tal cual (rgba(var(--bs-info-rgb), ...)), asi que si falta uno la
+     clase pinta el color de fabrica. Eso fue lo que paso con .bg-info, que
+     salia del cyan #0dcaf0 porque --bs-info-rgb no estaba aqui. */
+  --bs-warning-rgb: 245, 213, 71;
+  --bs-info-rgb: 20, 70, 160;
+  --bs-secondary-rgb: 98, 98, 92;
+  --bs-emphasis-color-rgb: 60, 60, 59;
+
+  /* OJO: las variables de la navbar NO van aqui. Bootstrap las declara sobre
+     .navbar, o sea sobre el propio <nav>, y una declaracion en el elemento
+     siempre le gana a un valor heredado de :root. Puestas aqui serian
+     inertes: el <nav> seguiria resolviendo la tinta oscura. Van en la regla
+     .menu, de la seccion 5.1, que es donde si aplica. */
+
+  --bs-border-radius: var(--mig-radio);
+  --bs-border-radius-sm: var(--mig-radio-sm);
+  --bs-border-radius-lg: var(--mig-radio-lg);
+  --bs-border-radius-pill: var(--mig-radio-pill);
+
+  --bs-font-sans-serif: var(--mig-fuente);
+  --bs-body-font-size: var(--mig-texto-base);
+  --bs-body-font-weight: var(--mig-peso-normal);
+  --bs-body-line-height: var(--mig-linea);
+  --bs-emphasis-color: var(--mig-tinta);
+  --bs-headings-font-weight: var(--mig-peso-titulo);
+  --bs-headings-line-height: var(--mig-linea-corta);
+
+  /* Badges y Alerts traen su propio juego de -text-emphasis / -bg-subtle.
+     Bootstrap los pone muy saturados; se bajan para que el texto siga
+     leyendose sobre el fondo tenue. Cada -text-emphasis se verifico contra
+     SU propio fondo, no contra la pagina: exito 9.44:1, peligro 7.31:1,
+     aviso 4.92:1, primario 12.37:1. */
+  --bs-primary-text-emphasis: var(--mig-primario-fuerte);
+  --bs-primary-bg-subtle: var(--mig-primario-suave);
+  --bs-primary-border-subtle: var(--mig-primario-borde);
+  --bs-success-text-emphasis: var(--mig-exito-fuerte);
+  --bs-success-bg-subtle: var(--mig-exito-suave);
+  --bs-success-border-subtle: var(--mig-exito-borde);
+  --bs-warning-text-emphasis: var(--mig-aviso-texto);
+  --bs-warning-bg-subtle: var(--mig-aviso-suave);
+  --bs-warning-border-subtle: var(--mig-aviso-borde);
+  --bs-danger-text-emphasis: var(--mig-peligro-fuerte);
+  --bs-danger-bg-subtle: var(--mig-peligro-suave);
+  --bs-danger-border-subtle: var(--mig-peligro-borde);
+  --bs-info-text-emphasis: var(--mig-primario-fuerte);
+  --bs-info-bg-subtle: var(--mig-info-suave);
+}
+
+
+/* ==========================================================================
+   3. BASE
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Compensa el navbar sticky: sin esto, el salto a untramite con ancla
+     (#visa-v) aterriza debajo del header. */
+  scroll-padding-top: calc(var(--mig-alto-nav) + var(--mig-esp-4));
+}
+
 body {
-  background-color: #f6f8fa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* Todos los titulos de la app usan la condensada. A 400 fijo para no
+     provocar negrita falsa (ver --mig-peso-titulo). */
+  font-family: var(--mig-fuente-titulo);
+  font-weight: var(--mig-peso-titulo);
+  color: var(--mig-tinta);
+  line-height: var(--mig-linea-corta);
+  /* Evita lineas huerfanas con la ultima palabra sola. */
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+  margin-bottom: var(--mig-esp-4);
+}
+
+a {
+  text-underline-offset: 0.15em;
+}
+
+/* Los formularios son el unico sitio donde el borde debe llegar a 3:1
+   (WCAG 1.4.11). El resto de bordes son decorativos. */
+.form-control,
+.form-select {
+  border-color: var(--mig-borde-fuerte);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--mig-primario);
+  box-shadow: 0 0 0 0.25rem rgb(18 80 124 / 18%);
+}
+
+.form-check-input:checked {
+  background-color: var(--mig-primario);
+  border-color: var(--mig-primario);
+}
+
+.form-check-input:focus {
+  border-color: var(--mig-primario);
+  box-shadow: 0 0 0 0.25rem rgb(18 80 124 / 18%);
+}
+
+/* --- Foco visible -------------------------------------------------------
+   Sustituye el outline por defecto, que sobre el navbar azul oscuro
+   quedaba practicamente invisible.
+   ------------------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 3px solid var(--mig-primario);
+  outline-offset: 2px;
+  border-radius: var(--mig-radio-sm);
+}
+
+.navbar :focus-visible {
+  outline-color: var(--mig-blanco);
+}
+
+/* No es un error de estilos: es el foco de un mouse, no de teclado. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+/* ==========================================================================
+   4. LAYOUT
+   ========================================================================== */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app__principal {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--mig-ancho-max);
+  /* Sin esto el bloque se pegaba al borde izquierdo de la pantalla y
+     dejaba el espacio sobrante vacio a la derecha. */
+  margin-inline: auto;
+  /* El aire lateral tambien es un token, asi que se ajusta en un solo
+     sitio en vez de repetir padding en cada pagina. */
+  padding-inline: var(--mig-gutter);
+  padding-block: var(--mig-esp-5) var(--mig-esp-6);
+}
+
+.app__principal:focus {
+  outline: none;
+}
+
+/* --- Saltar al contenido -----------------------------------------------
+   Invisible hasta recibir foco. Antes no habia forma de pasar el menu
+   por teclado, que es como navega un lector de pantalla.
+   ------------------------------------------------------------------------- */
+
+.saltar {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1080;
+  padding: var(--mig-esp-3) var(--mig-esp-5);
+  background: var(--mig-primario);
+  color: var(--mig-blanco);
+  font-weight: var(--mig-peso-medio);
+  border-bottom-right-radius: var(--mig-radio);
+}
+
+.saltar:focus {
+  left: 0;
+  color: var(--mig-blanco);
+  outline: 3px solid var(--mig-blanco);
+  outline-offset: -3px;
+}
+
+
+/* ==========================================================================
+   5. COMPONENTES
+   ========================================================================== */
+
+/* --- 5.0 botones --------------------------------------------------------
+   Bootstrap codifica sus propios colores de boton en la clase (.btn-warning
+   lleva #ffc107 literal), asi que redefine --bs-warning NO basta: hay que
+   sobreescribir las variables del boton.
+   ---------------------------------------------------------------------- */
+
+.btn-primary {
+  --bs-btn-bg: var(--mig-primario);
+  --bs-btn-border-color: var(--mig-primario);
+  --bs-btn-hover-bg: var(--mig-primario-fuerte);
+  --bs-btn-hover-border-color: var(--mig-primario-fuerte);
+  --bs-btn-active-bg: var(--mig-primario-fuerte);
+  --bs-btn-active-border-color: var(--mig-primario-fuerte);
+  --bs-btn-disabled-bg: var(--mig-borde-fuerte);
+  --bs-btn-disabled-border-color: var(--mig-borde-fuerte);
+  --bs-btn-focus-shadow-rgb: 20, 70, 160;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--mig-primario);
+  --bs-btn-border-color: var(--mig-primario);
+  --bs-btn-hover-bg: var(--mig-primario);
+  --bs-btn-hover-border-color: var(--mig-primario);
+  --bs-btn-hover-color: var(--mig-blanco);
+  --bs-btn-active-bg: var(--mig-primario-fuerte);
+  --bs-btn-active-border-color: var(--mig-primario-fuerte);
+  --bs-btn-active-color: var(--mig-blanco);
+  --bs-btn-focus-shadow-rgb: 20, 70, 160;
+}
+
+/* El magenta de marca es un color saturado: NO se lee como texto sobre
+   crema (3.74:1). Por eso el acento entra unicamente como FONDO, con
+   --mig-acento-fuerte para el texto y el hover. `.btn-acento` es la clase
+   del boton de marca; `.btn-warning` queda para su significado real. */
+.btn-acento {
+  --bs-btn-color: var(--mig-blanco);
+  --bs-btn-bg: var(--mig-acento);
+  --bs-btn-border-color: var(--mig-acento);
+  --bs-btn-hover-color: var(--mig-blanco);
+  --bs-btn-hover-bg: var(--mig-acento-fuerte);
+  --bs-btn-hover-border-color: var(--mig-acento-fuerte);
+  --bs-btn-active-color: var(--mig-blanco);
+  --bs-btn-active-bg: var(--mig-acento-fuerte);
+  --bs-btn-active-border-color: var(--mig-acento-fuerte);
+  --bs-btn-disabled-color: var(--mig-blanco);
+  --bs-btn-disabled-bg: var(--mig-apagado);
+  --bs-btn-disabled-border-color: var(--mig-apagado);
+  --bs-btn-focus-shadow-rgb: 219, 48, 105;
+}
+
+/* El amarillo es el unico color claro de la paleta, asi que es el unico
+   boton que lleva texto oscuro: --mig-blanco sobre el daria 1.45:1. Con
+   --mig-tinta sube a 7.62:1. */
+.btn-warning {
+  --bs-btn-color: var(--mig-tinta);
+  --bs-btn-bg: var(--mig-aviso);
+  --bs-btn-border-color: var(--mig-aviso);
+  --bs-btn-hover-color: var(--mig-tinta);
+  --bs-btn-hover-bg: var(--mig-aviso-borde);
+  --bs-btn-hover-border-color: var(--mig-aviso-borde);
+  --bs-btn-active-color: var(--mig-tinta);
+  --bs-btn-active-bg: var(--mig-aviso-borde);
+  --bs-btn-active-border-color: var(--mig-aviso-borde);
+  --bs-btn-disabled-color: var(--mig-tinta);
+  --bs-btn-disabled-bg: var(--mig-borde);
+  --bs-btn-disabled-border-color: var(--mig-borde);
+  --bs-btn-focus-shadow-rgb: 245, 213, 71;
+}
+
+/* --- 5.1 pagina · estructura comun de todas las vistas -------------------
+   Reemplaza el par <h1> + <p> de texto gris que estaba copiado en 7 paginas.
+   Uso: <Pagina titulo="..." descripcion="..." />
+   ------------------------------------------------------------------------- */
+
+/* La cabecera es la que lleva el margen hacia el contenido, no la
+   descripcion: asi una pagina sin descripcion tiene el mismo ritmo que una
+   con ella. */
+.pagina__cabecera {
+  margin-bottom: var(--mig-esp-5);
+}
+
+.pagina__titulo {
+  font-size: var(--mig-texto-2xl);
+  line-height: var(--mig-linea-corta);
+  font-weight: var(--mig-peso-titulo);
+  margin-bottom: var(--mig-esp-2);
+}
+
+.pagina__descripcion {
+  font-size: var(--mig-texto-lg);
+  color: var(--mig-apagado);
+  max-width: var(--mig-medida);
+  margin-bottom: 0;
+}
+
+/* --- 5.2 menu · barra de navegacion -------------------------------------- */
+
+/* ESTE BLOQUE NO SE PUEDE TRASLADAR A :root.
+
+   Bootstrap declara las variables de la navbar sobre .navbar, es decir, sobre
+   el propio <nav>. En CSS, una declaracion en el elemento siempre le gana a un
+   valor heredado de :root: la herencia solo entra en juego cuando el elemento
+   no tiene ninguna. Por eso ponerlas en :root no las anula, las deja
+   inertes, y la barra sigue saliendo con la tinta oscura.
+
+   Aqui se declaran en .menu, que es la MISMA especificidad que .navbar
+   (0,1,0) pero aparece despues en el fichero, asi que gana. El resultado es
+   que todo el texto de la barra, incluidos los elementos que no tienen una
+   clase propia, hereda blanco. Con esto ya no hace falta poner color a mano
+   en cada piece: la barra es blanca por construccion. */
+.menu {
+  background: var(--mig-primario);
+  box-shadow: var(--mig-sombra);
+
+  /* Texto de la barra: blanco. Bootstrap hace lo contrario, porque su .navbar
+     base es una barra de texto oscuro y solo .navbar-dark la pone blanca. */
+  --bs-navbar-color: var(--mig-blanco);
+  --bs-navbar-hover-color: var(--mig-blanco);
+  --bs-navbar-active-color: var(--mig-blanco);
+  --bs-navbar-brand-color: var(--mig-blanco);
+  --bs-navbar-brand-hover-color: var(--mig-blanco);
+  /* Los enlaces del colapsable de movil se despliegan sobre la misma barra
+     azul, asi que tambien van en blanco. */
+  --bs-nav-link-color: var(--mig-blanco);
+  --bs-nav-link-hover-color: var(--mig-blanco);
+
+  /* El icono de la hamburguesa es un SVG embebido en un background-image, con
+     el trazo escrito a mano dentro del data-uri. No se puede alcanzar con
+     color ni con currentColor. Bootstrap lo publica como variable, asi que se
+     sustituye por el mismo dibujo con el trazo en blanco puro, que es el
+     color que usan el resto de la barra. Sin esto, las tres rayitas salen
+     grises sobre el azul. */
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.menu__marca {
+  font-family: var(--mig-fuente-titulo);
+  font-weight: var(--mig-peso-titulo);
+  font-size: var(--mig-texto-xl);
+  letter-spacing: 0.01em;
+  color: var(--mig-blanco);
+}
+
+.menu__marca:hover,
+.menu__marca:focus {
+  color: var(--mig-blanco);
+}
+
+/* Los enlaces van en BLANCO PURO, no en un blanco al 78%: el blanco parcial
+   bajaba a 5.94:1 y ademas hacia pensar que el color es el que marca la
+   jerarquia. Aqui el blanco es el color, y la jerarquia la llevan el
+   subrayado y el fondo al pasar por encima. Blanco sobre la barra: 8.70:1. */
+.menu__enlace {
+  color: var(--mig-blanco);
+  font-weight: var(--mig-peso-medio);
+  padding-inline: var(--mig-esp-3) !important;
+  position: relative;
+  border-radius: var(--mig-radio-sm);
+  transition:
+    color var(--mig-dur-rapida) var(--mig-curva),
+    background-color var(--mig-dur-rapida) var(--mig-curva);
+}
+
+.menu__enlace:hover,
+.menu__enlace:focus {
+  color: var(--mig-blanco);
+  /* realce al pasar por encima. El texto no cambia de color: sigue siendo
+     blanco, y lo que responde es el fondo. */
+  background-color: rgb(255 255 255 / 14%);
+}
+
+/* Subrayado que crece desde el centro. */
+.menu__enlace::after {
+  content: "";
+  position: absolute;
+  left: var(--mig-esp-3);
+  right: var(--mig-esp-3);
+  bottom: 0.35rem;
+  height: 2px;
+  background: var(--mig-blanco);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--mig-dur) var(--mig-curva);
+}
+
+.menu__enlace:hover::after,
+.menu__enlace:focus-visible::after,
+.menu__enlace.activo::after {
+  transform: scaleX(1);
+}
+
+/* Con todos los enlaces en blanco, el subrayado es lo unico que distingue la
+   pagina actual. Por eso el activo va mas grueso que el de hover: si no, los
+   dos estados se verian igual. */
+.menu__enlace.activo {
+  color: var(--mig-blanco);
+}
+
+.menu__enlace.activo::after {
+  height: 3px;
+  bottom: 0.3rem;
+}
+
+/* Las acciones de la derecha son el unico lugar donde el acento cabe: como
+   fondo con texto blanco (4.92:1), nunca como texto. */
+.menu__acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--mig-esp-2);
+}
+
+/* En movil el colapsable oculta los enlaces, pero "Ayuda urgente" no puede
+   quedar escondido detras del hamburguesa: es la salida de emergencia de
+   quien esta en crisis. Se queda visible siempre. */
+/* El boton "Ayuda urgente" es el UNICO elemento de la barra que no lleva
+   texto blanco, y es a proposito: su fondo es el amarillo de marca, y el
+   blanco sobre amarillo da 1.45:1, ilegible. Aqui el texto va en
+   --mig-tinta, que sobre el amarillo sube a 7.62:1. Es el mismo criterio que
+   .btn-warning: un relleno claro lleva texto oscuro. Si alguna vez se pone
+   este texto en blanco, se pierde. */
+.menu__urgente {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* El boton "Entrar" tambien va en blanco puro, como los enlaces. Antes el
+   texto iba al 85% (6.75:1) y el borde al 55% (3.78:1): ambos pasaban el
+   minimo, pero se veian apagados contra el azul. En blanco, texto y borde
+   quedan en 8.70:1, muy por encima del 3:1 que WCAG pide para el limite de
+   un control. El hover invierte: fondo blanco y texto en el azul fuerte
+   (14.53:1), porque #0b2758 sobre #1446a0 soloeria 1.67:1. */
+.menu__cuenta {
+  color: var(--mig-blanco);
+  border-color: var(--mig-blanco);
+}
+
+.menu__cuenta:hover,
+.menu__cuenta:focus {
+  background: var(--mig-blanco);
+  color: var(--mig-primario-fuerte);
+  border-color: var(--mig-blanco);
+}
+
+/* --- 5.3 pie · pie de pagina --------------------------------------------- */
+
+.pie {
+  flex-shrink: 0;
+  background: var(--mig-blanco);
+  border-top: 1px solid var(--mig-borde);
+  padding-block: var(--mig-esp-5);
+  font-size: var(--mig-texto-sm);
+}
+
+.pie__aviso {
+  color: var(--mig-apagado);
+  max-width: var(--mig-medida);
+  margin-bottom: var(--mig-esp-2);
+}
+
+.pie__enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mig-esp-2) var(--mig-esp-4);
+}
+
+.pie__enlace {
+  color: var(--mig-primario);
+  font-weight: var(--mig-peso-medio);
+}
+
+/* --- 5.4 inicio-portada · encabezado con imagen -------------------------- */
+
+.portada {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--mig-radio-lg);
+  background: var(--mig-primario-fuerte);
+  color: var(--mig-blanco);
+  margin-bottom: var(--mig-esp-6);
+}
+
+.portada__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.32;
+}
+
+.portada__contenido {
+  position: relative;
+  padding: var(--mig-esp-7) var(--mig-esp-5);
+  max-width: 46rem;
+}
+
+.portada__titulo {
+  font-size: var(--mig-texto-3xl);
+  line-height: var(--mig-linea-corta);
+  font-weight: var(--mig-peso-titulo);
+  color: var(--mig-blanco);
+  margin-bottom: var(--mig-esp-3);
+}
+
+.portada__texto {
+  font-size: var(--mig-texto-lg);
+  color: rgb(255 255 255 / 88%);
+  margin-bottom: 0;
+}
+
+.portada__insignias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mig-esp-2);
+  margin-bottom: var(--mig-esp-4);
+}
+
+.portada__insignia {
+  display: inline-block;
+  padding: var(--mig-esp-1) var(--mig-esp-3);
+  border-radius: var(--mig-radio-pill);
+  background: rgb(255 255 255 / 16%);
+  border: 1px solid rgb(255 255 255 / 28%);
+  font-size: var(--mig-texto-xs);
+  font-weight: var(--mig-peso-medio);
+}
+
+@media (max-width: 575.98px) {
+  .portada__contenido {
+    padding: var(--mig-esp-6) var(--mig-esp-4);
+  }
+}
+
+/* --- 5.5 acceso · tarjetas grandes del inicio ---------------------------- */
+
+.acceso {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  box-shadow: var(--mig-sombra-sm);
+  transition: transform var(--mig-dur) var(--mig-curva),
+    box-shadow var(--mig-dur) var(--mig-curva),
+    border-color var(--mig-dur) var(--mig-curva);
+}
+
+.acceso:hover,
+.acceso:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: var(--mig-sombra);
+  border-color: var(--mig-primario-borde);
+  color: inherit;
+}
+
+.acceso:active {
+  transform: translateY(-1px);
+}
+
+.acceso__cuerpo {
+  padding: var(--mig-esp-5);
+}
+
+.acceso__titulo {
+  font-size: var(--mig-texto-lg);
+  font-weight: var(--mig-peso-fuerte);
+  color: var(--mig-primario-fuerte);
+  margin-bottom: var(--mig-esp-2);
+  display: flex;
+  align-items: center;
+  gap: var(--mig-esp-2);
+}
+
+.acceso__texto {
+  color: var(--mig-apagado);
+  margin-bottom: 0;
+}
+
+.acceso__flecha {
+  margin-left: auto;
+  color: var(--mig-primario);
+  transition: transform var(--mig-dur) var(--mig-curva);
+}
+
+.acceso:hover .acceso__flecha {
+  transform: translateX(3px);
+}
+
+/* --- 5.6 tarjeta-tramite · fichas de la guia ---------------------------- */
+
+.tarjeta-tramite {
+  max-width: var(--mig-ancho-lectura);
+  margin-inline: auto;
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  box-shadow: var(--mig-sombra-sm);
+  margin-bottom: var(--mig-esp-5);
+  overflow: hidden;
+  transition: box-shadow var(--mig-dur) var(--mig-curva);
+}
+
+.tarjeta-tramite:target {
+  border-color: var(--mig-primario);
+  box-shadow: 0 0 0 4px rgb(18 80 124 / 12%);
+}
+
+.tarjeta-tramite__cuerpo {
+  padding: var(--mig-esp-5);
+}
+
+.tarjeta-tramite__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--mig-esp-3);
+  margin-bottom: var(--mig-esp-2);
+}
+
+.tarjeta-tramite__titulo {
+  font-size: var(--mig-texto-xl);
+  margin-bottom: 0;
+}
+
+/* Estado de la ficha. Bootstrap pone --bs-badge-color: #fff en .badge, asi que
+   el texto se cambia desde ahi. El amarillo es el unico estado que NO admite
+   texto blanco (1.45:1): lleva tinta, que lo sube a 7.62:1.
+   Contraste verificado: abierto 8.12, menores 7.62, cerrado 6.14. */
+/* Los tres estados. El fondo va con background-color, la forma larga, y no con
+   el atajo background: asi se compite en la misma propiedad en la que compite
+   Bootstrap, sin que un atajo pueda pisar de mas.
+
+   El borde se reserva en los tres (1px transparente) para que las pildoras
+   midan lo mismo, pero solo "menores" lo pinta. El motivo es que su relleno
+   amarillo sobre la tarjeta blanca da 1.45:1: sin borde, la forma de la
+   pildora se deshace y el texto parece flotar suelto. Con el borde en
+   --mig-aviso-texto el limite llega a 6.05:1 contra la tarjeta y a 4.17:1
+   contra su propio relleno, y es el mismo matiz (49) que el amarillo, asi que
+   no parece un color ajeno.
+
+   Los otros dos si tienen su relleno definido contra la tarjeta (8.12:1 y
+   5.07:1), asi que su borde se queda transparente. */
+.estado {
+  --bs-badge-color: var(--mig-blanco);
+  flex-shrink: 0;
+  border: 1px solid transparent;
+}
+
+.estado--abierto {
+  background-color: var(--mig-exito);
+}
+
+.estado--menores {
+  --bs-badge-color: var(--mig-tinta);
+  background-color: var(--mig-aviso);
+  border-color: var(--mig-aviso-texto);
+}
+
+.estado--cerrado {
+  background-color: var(--mig-apagado);
+}
+
+.tarjeta-tramite__resumen {
+  color: var(--mig-apagado);
+  margin-bottom: var(--mig-esp-4);
+  max-width: var(--mig-medida);
+}
+
+.tarjeta-tramite__bloque {
+  margin-bottom: var(--mig-esp-4);
+}
+
+.tarjeta-tramite__subtitulo {
+  /* Es un h4, asi que heredaria la condensada. A 13px en mayusculas una
+     fuente condensada no se lee: se vuelve a la fuente de texto. */
+  font-family: var(--mig-fuente);
+  font-size: var(--mig-texto-xs);
+  font-weight: var(--mig-peso-medio);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--mig-apagado);
+  margin-bottom: var(--mig-esp-2);
+}
+
+.tarjeta-tramite__lista {
+  margin: 0;
+  padding-left: var(--mig-esp-4);
+  color: var(--mig-tinta);
+}
+
+.tarjeta-tramite__lista li {
+  margin-bottom: var(--mig-esp-1);
+}
+
+/* Los metadatos (donde, costo, vigencia, plazo) como ficha de datos:
+   label a la izquierda en version estrecha, apilados en movil. */
+.tarjeta-tramite__meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--mig-esp-1) var(--mig-esp-4);
+  margin: 0;
+  padding: var(--mig-esp-4);
+  background: var(--mig-superficie);
+  border-radius: var(--mig-radio-sm);
+  font-size: var(--mig-texto-sm);
+}
+
+.tarjeta-tramite__meta > div {
+  display: flex;
+  gap: var(--mig-esp-2);
+  align-items: baseline;
+}
+
+.tarjeta-tramite__meta dt {
+  font-weight: var(--mig-peso-fuerte);
+  color: var(--mig-apagado);
+  min-width: 5.5rem;
+  flex-shrink: 0;
+}
+
+.tarjeta-tramite__meta dd {
+  margin: 0;
+  color: var(--mig-tinta);
+}
+
+.tarjeta-tramite__pie {
+  padding: var(--mig-esp-4) var(--mig-esp-5);
+  background: var(--mig-blanco);
+  border-top: 1px solid var(--mig-borde);
+}
+
+.tarjeta-tramite__alerta {
+  border-left: 3px solid var(--mig-aviso);
+  border-radius: var(--mig-radio-sm);
+  font-size: var(--mig-texto-sm);
+}
+
+@media (max-width: 575.98px) {
+  .tarjeta-tramite__cuerpo {
+    padding: var(--mig-esp-4);
+  }
+
+  .tarjeta-tramite__cabecera {
+    flex-direction: column;
+    gap: var(--mig-esp-2);
+  }
+}
+
+/* --- 5.7 asistente · "¿cual me sirve?" de Regularizate -------------------- */
+
+.asistente {
+  max-width: var(--mig-ancho-lectura);
+  margin-inline: auto;
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-primario-borde);
+  border-left: 4px solid var(--mig-primario);
+  border-radius: var(--mig-radio);
+  box-shadow: var(--mig-sombra-sm);
+  padding: var(--mig-esp-5);
+  margin-bottom: var(--mig-esp-5);
+}
+
+.asistente__titulo {
+  font-size: var(--mig-texto-xl);
+  margin-bottom: var(--mig-esp-4);
+}
+
+.asistente__pregunta {
+  margin-bottom: var(--mig-esp-3);
+  padding-bottom: var(--mig-esp-3);
+  border-bottom: 1px solid var(--mig-borde);
+}
+
+.asistente__pregunta:last-of-type {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.asistente__etiqueta {
+  font-weight: var(--mig-peso-medio);
+  margin-bottom: var(--mig-esp-2);
+  display: block;
+}
+
+.asistente__opciones {
+  display: flex;
+  gap: var(--mig-esp-4);
+}
+
+.asistente__resultado {
+  margin-top: var(--mig-esp-4);
+  padding: var(--mig-esp-4);
+  background: var(--mig-exito-suave);
+  border-radius: var(--mig-radio-sm);
+  color: var(--mig-exito-fuerte);
+}
+
+.asistente__nota {
+  margin-top: var(--mig-esp-4);
+  color: var(--mig-apagado);
+  margin-bottom: 0;
+}
+
+/* --- 5.8 filtros · selectores de DondeIr --------------------------------- */
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mig-esp-3);
+  margin-bottom: var(--mig-esp-4);
+}
+
+.filtros__campo {
+  flex: 1 1 12rem;
+}
+
+.filtros__conteo {
+  width: 100%;
+  font-size: var(--mig-texto-sm);
+  color: var(--mig-apagado);
+  margin-bottom: 0;
+}
+
+/* --- 5.9 directorio · resultados de DondeIr ------------------------------ */
+
+.directorio__vacio {
+  padding: var(--mig-esp-6);
+  text-align: center;
+  color: var(--mig-apagado);
+  background: var(--mig-blanco);
+  border: 1px dashed var(--mig-borde-fuerte);
+  border-radius: var(--mig-radio);
+}
+
+.lugar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--mig-esp-3);
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  padding: var(--mig-esp-4);
+  margin-bottom: var(--mig-esp-3);
+  transition: border-color var(--mig-dur) var(--mig-curva),
+    box-shadow var(--mig-dur) var(--mig-curva);
+}
+
+.lugar:hover {
+  border-color: var(--mig-primario-borde);
+  box-shadow: var(--mig-sombra-sm);
+}
+
+.lugar__nombre {
+  font-weight: var(--mig-peso-fuerte);
+  margin-bottom: var(--mig-esp-1);
+}
+
+.lugar__detalle {
+  font-size: var(--mig-texto-sm);
+  color: var(--mig-apagado);
+  margin: 0;
+}
+
+.lugar__etiqueta {
+  display: inline-block;
+  font-size: var(--mig-texto-xs);
+  font-weight: var(--mig-peso-medio);
+  color: var(--mig-primario-fuerte);
+  background: var(--mig-primario-suave);
+  border-radius: var(--mig-radio-pill);
+  padding: 0 var(--mig-esp-2);
+  margin-right: var(--mig-esp-2);
+}
+
+@media (max-width: 575.98px) {
+  .lugar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* --- 5.10 linea-ayuda · numeros de Ayuda -------------------------------- */
+
+.linea-ayuda {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--mig-esp-3);
+  padding: var(--mig-esp-4);
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-left: 4px solid var(--mig-exito);
+  border-radius: var(--mig-radio);
+  color: var(--mig-tinta);
+  text-decoration: none;
+  margin-bottom: var(--mig-esp-3);
+  transition: transform var(--mig-dur) var(--mig-curva),
+    box-shadow var(--mig-dur) var(--mig-curva);
+}
+
+.linea-ayuda:hover,
+.linea-ayuda:focus-visible {
+  transform: translateX(3px);
+  box-shadow: var(--mig-sombra-sm);
+  color: var(--mig-tinta);
+}
+
+.linea-ayuda__nombre {
+  font-weight: var(--mig-peso-medio);
+}
+
+.linea-ayuda__dato {
+  font-weight: var(--mig-peso-fuerte);
+  color: var(--mig-primario-fuerte);
+  white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+  .linea-ayuda {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--mig-esp-1);
+  }
+}
+
+/* --- 5.11 bloque · tarjeta de titulo en Empleo y Preguntas ---------------- */
+
+.bloque {
+  max-width: var(--mig-ancho-lectura);
+  margin-inline: auto;
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  box-shadow: var(--mig-sombra-sm);
+  margin-bottom: var(--mig-esp-4);
+  overflow: hidden;
+}
+
+.bloque__cabecera {
+  padding: var(--mig-esp-3) var(--mig-esp-4);
+  background: var(--mig-primario-suave);
+  border-bottom: 1px solid var(--mig-borde);
+  font-weight: var(--mig-peso-titulo);
+}
+
+.bloque__fila {
+  display: flex;
+  align-items: center;
+  gap: var(--mig-esp-3);
+  padding: var(--mig-esp-3) var(--mig-esp-4);
+  border-bottom: 1px solid var(--mig-borde);
+  color: var(--mig-tinta);
+  text-decoration: none;
+  transition: background var(--mig-dur-rapida) var(--mig-curva);
+}
+
+.bloque__fila:last-child {
+  border-bottom: 0;
+}
+
+a.bloque__fila:hover,
+a.bloque__fila:focus-visible {
+  background: var(--mig-primario-suave);
+  color: var(--mig-primario-fuerte);
+}
+
+.bloque__fila--no {
+  color: var(--mig-peligro);
+  font-weight: var(--mig-peso-medio);
+}
+
+/* El punto de estado de cada fila: sin depender solo del color. */
+.bloque__marca {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--mig-radio-pill);
+  display: grid;
+  place-items: center;
+  font-size: var(--mig-texto-xs);
+  font-weight: var(--mig-peso-fuerte);
+  color: var(--mig-blanco);
+  background: var(--mig-exito);
+}
+
+.bloque__marca--no {
+  background: var(--mig-peligro);
+}
+
+/* --- 5.12 tabla-docs · que documento vale en Colombia -------------------- */
+
+.tabla-docs {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  font-size: var(--mig-texto-sm);
+}
+
+.tabla-docs th,
+.tabla-docs td {
+  padding: var(--mig-esp-3) var(--mig-esp-4);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--mig-borde);
+}
+
+.tabla-docs thead th {
+  background: var(--mig-primario-suave);
+  color: var(--mig-primario-fuerte);
+  font-weight: var(--mig-peso-fuerte);
+  font-size: var(--mig-texto-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.tabla-docs tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla-docs tbody tr {
+  transition: background var(--mig-dur-rapida) var(--mig-curva);
+}
+
+.tabla-docs tbody tr:hover {
+  background: var(--mig-superficie);
+}
+
+.tabla-docs__documento {
+  font-weight: var(--mig-peso-fuerte);
+  color: var(--mig-tinta);
+  min-width: 12rem;
+}
+
+.tabla-docs__si {
+  color: var(--mig-exito);
+  font-weight: var(--mig-peso-medio);
+}
+
+/* El "no" va en --mig-peligro, no en --mig-aviso. El amarillo de la paleta es
+   un color de RELLENO: como texto sobre la tarjeta blanca daba 1.45:1, que es
+   ilegible. Ademas "no" es una respuesta negativa, no una advertencia, asi que
+   el magenta le corresponde mejor que el aviso. Contraste 6.07:1, y el verde
+   del "si" queda en 8.12:1: los dos se distinguen de un vistazo. */
+.tabla-docs__no {
+  color: var(--mig-peligro);
+  font-weight: var(--mig-peso-medio);
+}
+
+/* En movil la tabla de 3 columnas con frases largas no cabe. Se convierte en
+   tarjetas apiladas usando la cabecera como etiqueta de cada bloque. */
+@media (max-width: 767.98px) {
+  .tabla-docs,
+  .tabla-docs tbody,
+  .tabla-docs tr,
+  .tabla-docs td {
+    display: block;
+    width: 100%;
+  }
+
+  .tabla-docs thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .tabla-docs tr {
+    border-bottom: 1px solid var(--mig-borde);
+    padding: var(--mig-esp-3) var(--mig-esp-4);
+  }
+
+  .tabla-docs tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .tabla-docs td {
+    border-bottom: 0;
+    padding: 0 0 var(--mig-esp-2);
+  }
+
+  .tabla-docs td:last-child {
+    padding-bottom: 0;
+  }
+
+  /* La etiqueta sale del atributo data-column del <td>. */
+  .tabla-docs td::before {
+    content: attr(data-column);
+    display: block;
+    font-size: var(--mig-texto-xs);
+    font-weight: var(--mig-peso-fuerte);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--mig-apagado);
+    margin-bottom: var(--mig-esp-1);
+  }
+
+  .tabla-docs__documento {
+    min-width: 0;
+    font-size: var(--mig-texto-base);
+  }
+
+  /* El nombre del documento no lleva etiqueta: es el titulo de la tarjeta. */
+  .tabla-docs__documento::before {
+    display: none;
+  }
+}
+
+/* --- 5.13 acordeon · Preguntas frecuentes --------------------------------- */
+
+.faq {
+  max-width: var(--mig-ancho-lectura);
+  margin-inline: auto;
+  --bs-accordion-border-color: var(--mig-borde);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgb(18 80 124 / 18%);
+}
+
+.faq .accordion-item {
+  background: var(--mig-blanco);
+  border-color: var(--mig-borde);
+}
+
+.faq .accordion-button {
+  font-weight: var(--mig-peso-medio);
+  color: var(--mig-tinta);
+  background: var(--mig-blanco);
+}
+
+.faq .accordion-button:not(.collapsed) {
+  color: var(--mig-primario-fuerte);
+  background: var(--mig-primario-suave);
+  box-shadow: none;
+}
+
+.faq .accordion-button:focus {
+  border-color: var(--mig-primario);
+}
+
+.faq .accordion-body {
+  color: var(--mig-apagado);
+  line-height: var(--mig-linea);
+}
+
+/* --- 5.14 acceso-form · Login y Registro ---------------------------------- */
+
+.acceso-form {
+  max-width: 26rem;
+  margin-inline: auto;
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  box-shadow: var(--mig-sombra);
+  padding: var(--mig-esp-5);
+}
+
+.acceso-form__titulo {
+  font-size: var(--mig-texto-xl);
+  text-align: center;
+  margin-bottom: var(--mig-esp-5);
+}
+
+.acceso-form__campo {
+  margin-bottom: var(--mig-esp-4);
+}
+
+.acceso-form__etiqueta {
+  font-weight: var(--mig-peso-medio);
+  margin-bottom: var(--mig-esp-1);
+}
+
+.acceso-form__pie {
+  margin: var(--mig-esp-4) 0 0;
+  font-size: var(--mig-texto-sm);
+  text-align: center;
+  color: var(--mig-apagado);
+}
+
+/* Errores: texto visible, no alert() del navegador. */
+.acceso-form__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mig-esp-2);
+  margin-bottom: var(--mig-esp-4);
+  padding: var(--mig-esp-3);
+  background: var(--mig-peligro-suave);
+  border: 1px solid var(--mig-peligro-borde);
+  border-radius: var(--mig-radio-sm);
+  color: var(--mig-peligro-fuerte);
+  font-size: var(--mig-texto-sm);
+}
+
+.acceso-form__exito {
+  background: var(--mig-exito-suave);
+  border-color: var(--mig-exito-borde);
+  color: var(--mig-exito-fuerte);
+}
+
+.acceso-form__pie-boton {
+  margin-top: var(--mig-esp-5);
+}
+
+@media (max-width: 575.98px) {
+  .acceso-form {
+    padding: var(--mig-esp-4);
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+}
+
+
+/* ==========================================================================
+   6. UTILIDADES
+   ========================================================================== */
+
+.apoyo {
+  font-size: var(--mig-texto-sm);
+  color: var(--mig-apagado);
+}
+
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ==========================================================================
+   7. MOTION
+   --------------------------------------------------------------------------
+   Reglas que sostienen esta seccion:
+     - Solo `transform` y `opacity`. Compilan en el compositor y no disparan
+       layout. Animar width/height/top se nota en Android de gama baja, que
+       es probablemente el dispositivo de quien usa esta app.
+     - Sin `will-change` permanente: se queda comiendo memoria de GPU.
+     - Todo pasa por los tokens --mig-dur-* y --mig-curva. Para cambiar el
+       ritmo de la app entera se toca el token, no las reglas.
+   ========================================================================== */
+
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateY(var(--mig-desplaz-entrada));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes entrada-suave {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--mig-desplaz-entrada) / 2));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Entrada de los bloques de contenido. El retardo escalonado lo da nth-child,
+   asi que el orden de las tarjetas se lee como una secuencia. */
+.animar-entrada {
+  animation: entrada var(--mig-dur-lenta) var(--mig-curva) both;
+}
+
+.animar-entrada:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.animar-entrada:nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.animar-entrada:nth-child(4) {
+  animation-delay: 180ms;
+}
+
+.animar-entrada:nth-child(5) {
+  animation-delay: 240ms;
+}
+
+.animar-entrada:nth-child(6) {
+  animation-delay: 300ms;
+}
+
+/* Version sin retardo, para bloques que ya estan en pantalla al cargar y no
+   deben esperar a que el stagger termine. */
+.animar-directo {
+  animation: entrada-suave var(--mig-dur) var(--mig-curva) both;
+}
+
+/* --- Respeto por la preferencia del sistema ------------------------------
+   Este bloque es la red de seguridad de toda la seccion. Si el sistema pide
+   menos movimiento, aqui se apaga TODO, sin excepciones.
+   ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Los cambios de estado se mantienen, pero sin travels: la informacion
+     de "estoy aqui" no puede depender solo de la animacion. */
+  .acceso:hover,
+  .acceso:focus-visible,
+  .acceso:active,
+  .linea-ayuda:hover,
+  .linea-ayuda:focus-visible,
+  .menu__enlace:hover::after {
+    transform: none;
+  }
+
+  .acceso:hover .acceso__flecha,
+  .menu__enlace:hover::after {
+    transform: scaleX(1);
+  }
 }
