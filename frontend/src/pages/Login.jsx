@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, Navigate } from 'react-router-dom';
-import "../styles/login.css"
-import Inicio from "../pages/inicio"
-import axios from "axios";
+
+
+import api from "../services/api";
 
 function Login() {
   const [miLogin, setMiLogin] = useState(false);
@@ -12,7 +12,7 @@ function Login() {
   async function peticionPost(txtusu, txtpas) {
     console.log("usu y tel ->", txtusu, txtpas);
     try {
-      const response = await axios.post('https://migrapp-dqx9.vercel.app/api/usuarios/autenticacion', { correo: txtusu, contraseña: txtpas });
+      const response = await api.post('/usuarios/autenticacion', { correo: txtusu, contraseña: txtpas });
       console.log("Respuesta del servidor:", response.data);
 
       if (response.data.mensaje === 'Usuario autenticado correctamente') {
@@ -55,8 +55,8 @@ function Login() {
 
   return (
     <div>
-      <div id="login" className="login template d-flex justify-content-center align-items-center vh-100">
-        <div className="form-container p-5 rounded bg-white">
+      <div id="login" className="d-flex justify-content-center"><div style={{ maxWidth: 420, width: "100%" }}>
+        <div className="p-4 border rounded bg-white w-100">
           <form>
             <h3 className="text-center">Iniciar sesión</h3>
             <div className="mb-2">
@@ -93,13 +93,13 @@ function Login() {
             </div>
           </form>
           <p className="text-end mt-2">
-            Olvidaste tu <a href="">Contraseña?</a> <Link to="/registro" className="ms-2">
+            ¿No tienes cuenta? <Link to="/registro" className="ms-2">
               Registrarse
             </Link>
           </p>
         </div>
-      </div>
-      {miLogin && <Navigate to="/inicio" />}
+      </div></div>
+      {miLogin && <Navigate to="/" />}
     </div>
   );
 }

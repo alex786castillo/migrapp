@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Link, Navigate} from 'react-router-dom'
-import "../styles/login.css"
-import axios from 'axios';
-import Inicio from './inicio';
+
+import api from '../services/api';
+
 
 function Registro(){
 
@@ -15,7 +15,7 @@ function Registro(){
 
     async function peticionPost(txtnom,txtapll,txtcorr,txtcon) {
         console.log("nom apell corr con -->", txtnom, txtapll, txtcorr, txtcon);
-        await axios.post('https://migrapp-dqx9.vercel.app/api/usuarios/registro', [txtnom, txtapll, txtcorr, txtcon])
+        await api.post('/usuarios/registro', [txtnom, txtapll, txtcorr, txtcon])
             .then(response => { 
                 if(response){
                   setMiregistro("true");
@@ -59,8 +59,8 @@ function Registro(){
     
     
     return(
-        <div className="signup template d-flex justify-content-center align-items-center vh-100">
-         <div className="form-container p-5 rounded bg-white " id="formularioR">
+        <div className="d-flex justify-content-center"><div style={{ maxWidth: 420, width: "100%" }}>
+         <div className="p-4 border rounded bg-white w-100" id="formularioR">
 
             <form>
                 <h3 className="text-center">Registrarse</h3>
@@ -90,11 +90,11 @@ function Registro(){
                 </div>
             </form>
             <p className="text-end mt-2">
-                Ya te resgistraste? <Link to="/" className="ms-2">Iniciar sesión</Link>
+                ¿Ya te registraste? <Link to="/login" className="ms-2">Iniciar sesión</Link>
             </p>
-        </div>
+        </div></div>
 
-        {miRegistro === "true" && <Navigate to="/inicio" />}
+        {miRegistro === "true" && <Navigate to="/" />}
     </div> 
     );
 }

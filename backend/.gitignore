@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# variables de entorno (contraseñas): nunca subir a GitHub
+.env
