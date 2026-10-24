@@ -8,6 +8,17 @@
     <meta name="description" content="MigrApp: guía práctica para venezolanos en Colombia. Trámites, documentos, empleo y a dónde acudir." />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- Fuentes: Noto Sans (texto) + Special Gothic Condensed One (titulos).
+         Esto vivia como @import dentro de index.css. Fuera de aqui por dos
+         razones: un @import solo se puede usar si es la primera regla del
+         fichero, y el <link> descarga la fuente EN PARALELO con el CSS en vez
+         de esperar a que el CSS llegue para empezar a pedir la fuente. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&family=Special+Gothic+Condensed+One&display=swap"
+    />
     <title>MigrApp</title>
   </head>
   <body>

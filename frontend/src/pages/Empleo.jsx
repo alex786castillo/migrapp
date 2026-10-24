@@ -1,41 +1,97 @@
-import { Card, ListGroup } from "react-bootstrap";
+import Pagina from "../components/Pagina";
+
+// Con que documento se puede trabajar formalmente. `ok: false` es lo que
+// cambia el color y la marca del punto: no se apoya solo en el color.
+const permisos = [
+  { texto: "PPT vigente", ok: true },
+  { texto: "PEP-Tutor", ok: true, nota: "formal o independiente" },
+  { texto: "Visa V Visitante Especial, visa M o R", ok: true },
+  { texto: "PIP / PTP (sello de turista)", ok: false },
+];
+
+const buscar = [
+  {
+    texto: "Servicio Público de Empleo (oficial y gratuito)",
+    href: "https://www.serviciodeempleo.gov.co",
+  },
+  { texto: "Computrabajo", href: "https://www.computrabajo.com.co" },
+];
+
+const antesDeEntrevista = [
+  "Hoja de vida corta (1 página), sin foto obligatoria, con teléfono colombiano.",
+  "Ten claro tu número de permiso o visa: te lo van a pedir.",
+  "Con contrato formal te afilian a salud (EPS) y pensión: es tu derecho, no un favor.",
+];
+
+// Check / aspa. aria-hidden: el estado ya lo dice el texto y el color.
+function Marca({ ok }) {
+  return (
+    <span
+      className={`bloque__marca${ok ? "" : " bloque__marca--no"}`}
+      aria-hidden="true"
+    >
+      {ok ? "✓" : "✕"}
+    </span>
+  );
+}
 
 export default function Empleo() {
   return (
-    <>
-      <h1 className="h3">Trabajar en Colombia</h1>
-      <p className="text-muted">MigrApp no publica ofertas propias: te decimos qué necesitas y dónde buscar.</p>
+    <Pagina
+      titulo="Trabajar en Colombia"
+      descripcion="MigrApp no publica ofertas propias: te decimos qué necesitas y dónde buscar."
+    >
+      <section className="bloque animar-directo">
+        <h2 className="bloque__cabecera">
+          ¿Con qué documento puedo trabajar formalmente?
+        </h2>
+        <ul className="list-unstyled mb-0">
+          {permisos.map((p) => (
+            <li
+              key={p.texto}
+              className={`bloque__fila${p.ok ? "" : " bloque__fila--no"}`}
+            >
+              <Marca ok={p.ok} />
+              <span>
+                {p.texto}
+                {p.nota && (
+                  <span className="apoyo"> — {p.nota}</span>
+                )}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-      <Card className="mb-3">
-        <Card.Header>¿Con qué documento puedo trabajar formalmente?</Card.Header>
-        <ListGroup variant="flush">
-          <ListGroup.Item>PPT vigente: sí.</ListGroup.Item>
-          <ListGroup.Item>PEP-Tutor: sí, formal o independiente.</ListGroup.Item>
-          <ListGroup.Item>Visa V Visitante Especial, visa M o R: sí.</ListGroup.Item>
-          <ListGroup.Item className="text-danger">PIP / PTP (sello de turista): no.</ListGroup.Item>
-        </ListGroup>
-      </Card>
+      <section className="bloque animar-directo">
+        <h2 className="bloque__cabecera">Dónde buscar empleo</h2>
+        {buscar.map((b) => (
+          <a
+            key={b.href}
+            className="bloque__fila"
+            href={b.href}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {b.texto}
+            <span className="acceso__flecha ms-auto" aria-hidden="true">
+              ↗
+            </span>
+          </a>
+        ))}
+      </section>
 
-      <Card className="mb-3">
-        <Card.Header>Dónde buscar empleo</Card.Header>
-        <ListGroup variant="flush">
-          <ListGroup.Item action href="https://www.serviciodeempleo.gov.co" target="_blank">
-            Servicio Público de Empleo (oficial y gratuito)
-          </ListGroup.Item>
-          <ListGroup.Item action href="https://www.computrabajo.com.co" target="_blank">
-            Computrabajo
-          </ListGroup.Item>
-        </ListGroup>
-      </Card>
-
-      <Card>
-        <Card.Header>Antes de tu primera entrevista</Card.Header>
-        <ListGroup variant="flush">
-          <ListGroup.Item>Hoja de vida corta (1 página), sin foto obligatoria, con teléfono colombiano.</ListGroup.Item>
-          <ListGroup.Item>Ten claro tu número de permiso o visa: te lo van a pedir.</ListGroup.Item>
-          <ListGroup.Item>Con contrato formal te afilian a salud (EPS) y pensión: es tu derecho, no un favor.</ListGroup.Item>
-        </ListGroup>
-      </Card>
-    </>
+      <section className="bloque animar-directo">
+        <h2 className="bloque__cabecera">Antes de tu primera entrevista</h2>
+        <ul className="list-unstyled mb-0">
+          {antesDeEntrevista.map((t) => (
+            <li key={t} className="bloque__fila">
+              <Marca ok />
+              <span>{t}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </Pagina>
   );
 }
