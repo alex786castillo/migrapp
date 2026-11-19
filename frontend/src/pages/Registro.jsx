@@ -6,13 +6,9 @@ import AccesoForm from "../components/AccesoForm";
 import Campo from "../components/Campo";
 
 // POST /api/usuarios/registro
-//   cuerpo  [nombre, apellido, correo, contraseña]   <- ARRAY posicional
-//   exito   200 { message }   <- ojo: "message" en ingles, no "mensaje"
-//   fallo   500 { message }
-//
-// El array posicional y la diferencia entre `message` y `mensaje` son el
-// contrato que espera backend/routes/usuarios.js. No se "mejora" aqui: se
-// manda tal cual. Si algun dia se cambia el backend, se cambia este archivo.
+//   cuerpo  { nombre, apellido, correo, contrasena }
+//   exito   201 { mensaje }
+//   fallo   400/409/500 { mensaje }
 export default function Registro() {
   const navegar = useNavigate();
   const [nombre, setNombre] = useState("");
@@ -31,24 +27,27 @@ export default function Registro() {
       return;
     }
 
+    if (contrasena.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+
     setEnviando(true);
     try {
-      const { data } = await api.post("/usuarios/registro", [
+      const { data } = await api.post("/usuarios/registro", {
         nombre,
         apellido,
         correo,
         contrasena,
-      ]);
-      // El backend responde 200 con `message`. Antes se comprobaba `response`
-      // entero, que con axios siempre es truthy, asi que el error de un correo
-      // duplicado caia en el catch y no se mostraba nada.
-      if (data.message) {
-        navegar("/login");
+      });
+
+      if (data.mensaje) {
+        navegar("/login", { state: { creado: true } });
       } else {
         setError("No pudimos crear la cuenta. Intenta de nuevo.");
       }
     } catch (e) {
-      const msg = e.response?.data?.message || e.response?.data?.mensaje;
+      const msg = e.response?.data?.mensaje;
       setError(
         msg ||
           (e.response
@@ -103,7 +102,7 @@ export default function Registro() {
           type="password"
           value={contrasena}
           onChange={(e) => setContrasena(e.target.value)}
-          placeholder="Elige una contraseña"
+          placeholder="Mínimo 8 caracteres"
           autoComplete="new-password"
         />
         <div className="acceso-form__pie-boton d-grid">

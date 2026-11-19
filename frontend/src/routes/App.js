@@ -10,6 +10,7 @@ import Preguntas from "../pages/Preguntas";
 import Perfil from "../pages/Perfil";
 import Login from "../pages/Login";
 import Registro from "../pages/Registro";
+import Asistente from "../pages/Asistente";
 
 // Todas las páginas cuelgan de <Layout />, que pone menú y footer una sola vez.
 // La ruta "/" es el inicio: la app es pública y la cuenta es opcional.
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/donde-ir" element={<DondeIr />} />
           <Route path="/ayuda" element={<Ayuda />} />
           <Route path="/preguntas" element={<Preguntas />} />
+          <Route path="/asistente" element={<Asistente />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />

@@ -1,20 +1,27 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, Spinner } from "react-bootstrap";
 import api from "../services/api";
+import { guardarUsuario } from "../services/sesion";
 import AccesoForm from "../components/AccesoForm";
 import Campo from "../components/Campo";
 
 // POST /api/usuarios/autenticacion
-//   cuerpo  { correo, contraseña }
-//   exito   200 { mensaje }
+//   cuerpo  { correo, contrasena }
+//   exito   200 { mensaje, usuario }
 //   fallo   401 { mensaje }   <- axios lanza excepcion, hay que capturarla
 export default function Login() {
   const navegar = useNavigate();
+  const ubicacion = useLocation();
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
+
+  // Registro redirige aquí con state { creado: true } tras crear la cuenta.
+  const exito = ubicacion.state?.creado
+    ? "Cuenta creada. Ya puedes iniciar sesión."
+    : "";
 
   async function enviar(e) {
     e.preventDefault();
@@ -29,17 +36,16 @@ export default function Login() {
     try {
       const { data } = await api.post("/usuarios/autenticacion", {
         correo,
-        contraseña: contrasena,
+        contrasena,
       });
-      // El backend responde 200 solo cuando las credenciales son correctas.
-      if (data.mensaje === "Usuario autenticado correctamente") {
-        navegar("/");
+
+      if (data.usuario) {
+        guardarUsuario(data.usuario);
+        navegar("/perfil");
       } else {
         setError(data.mensaje || "No pudimos iniciar sesión.");
       }
     } catch (e) {
-      // Antes este catch solo hacia console.log: una contraseña incorrecta
-      // (401) no mostraba absolutely nada al usuario.
       const msg = e.response?.data?.mensaje;
       setError(
         msg ||
@@ -56,6 +62,7 @@ export default function Login() {
     <AccesoForm
       titulo="Iniciar sesión"
       error={error}
+      exito={exito}
       pie={
         <>
           ¿No tienes cuenta? <Link to="/registro">Registrarse</Link>

@@ -1462,6 +1462,234 @@ a.bloque__fila:focus-visible {
   }
 }
 
+/* CTA que cierra el acordeón de Preguntas frecuentes. */
+.faq__cta {
+  max-width: var(--mig-ancho-lectura);
+  margin: var(--mig-esp-5) auto 0;
+  padding: var(--mig-esp-5);
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  text-align: center;
+}
+
+.faq__cta p {
+  margin-bottom: var(--mig-esp-3);
+  color: var(--mig-apagado);
+}
+
+/* --- 5.15 asistente · Chat de dudas -------------------------------------- */
+
+.asistente {
+  max-width: var(--mig-ancho-lectura);
+  margin-inline: auto;
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  box-shadow: var(--mig-sombra);
+  padding: var(--mig-esp-5);
+}
+
+.asistente__mensajes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mig-esp-3);
+  max-height: 30rem;
+  overflow-y: auto;
+  padding-right: var(--mig-esp-1);
+}
+
+.asistente__mensaje {
+  max-width: 85%;
+  padding: var(--mig-esp-3) var(--mig-esp-4);
+  border-radius: var(--mig-radio);
+  background: var(--mig-primario-suave);
+  color: var(--mig-tinta);
+}
+
+.asistente__mensaje--usuario {
+  align-self: flex-end;
+  background: var(--mig-primario);
+  color: var(--mig-blanco);
+}
+
+.asistente__autor {
+  display: block;
+  margin-bottom: var(--mig-esp-1);
+  font-size: var(--mig-texto-xs);
+  font-weight: var(--mig-peso-fuerte);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mig-apagado);
+}
+
+.asistente__mensaje--usuario .asistente__autor {
+  color: var(--mig-primario-suave);
+}
+
+.asistente__texto {
+  margin: 0;
+  line-height: var(--mig-linea);
+  white-space: pre-wrap;
+}
+
+.asistente__escribiendo {
+  display: flex;
+  align-items: center;
+  gap: var(--mig-esp-2);
+  color: var(--mig-apagado);
+}
+
+.asistente__sugerencias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mig-esp-2);
+  margin-top: var(--mig-esp-4);
+}
+
+.asistente__sugerencia {
+  padding: var(--mig-esp-2) var(--mig-esp-3);
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde-fuerte);
+  border-radius: var(--mig-radio-pill);
+  color: var(--mig-primario-fuerte);
+  font-family: inherit;
+  font-size: var(--mig-texto-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--mig-dur-rapida) var(--mig-curva),
+    border-color var(--mig-dur-rapida) var(--mig-curva);
+}
+
+.asistente__sugerencia:hover,
+.asistente__sugerencia:focus-visible {
+  background: var(--mig-primario-suave);
+  border-color: var(--mig-primario);
+}
+
+.asistente__formulario {
+  display: flex;
+  gap: var(--mig-esp-2);
+  margin-top: var(--mig-esp-4);
+}
+
+.asistente__entrada {
+  flex: 1;
+  min-width: 0;
+  padding: var(--mig-esp-3);
+  border: 1px solid var(--mig-borde-fuerte);
+  border-radius: var(--mig-radio-sm);
+  background: var(--mig-blanco);
+  color: var(--mig-tinta);
+  font-family: inherit;
+  font-size: var(--mig-texto-base);
+}
+
+.asistente__entrada:focus {
+  border-color: var(--mig-primario);
+  outline: 3px solid rgb(20 70 160 / 25%);
+  outline-offset: 1px;
+}
+
+.asistente__error {
+  margin: var(--mig-esp-3) 0 0;
+  padding: var(--mig-esp-3);
+  background: var(--mig-peligro-suave);
+  border: 1px solid var(--mig-peligro-borde);
+  border-radius: var(--mig-radio-sm);
+  color: var(--mig-peligro-fuerte);
+  font-size: var(--mig-texto-sm);
+}
+
+.asistente__aviso {
+  margin-top: var(--mig-esp-4);
+  margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+  .asistente {
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .asistente__mensajes {
+    max-height: 55vh;
+  }
+
+  .asistente__mensaje {
+    max-width: 95%;
+  }
+
+  .asistente__formulario {
+    flex-direction: column;
+  }
+
+  .asistente__entrada {
+    width: 100%;
+  }
+}
+
+/* --- 5.16 perfil · Mi cuenta --------------------------------------------- */
+
+.perfil {
+  max-width: 32rem;
+  margin-inline: auto;
+  background: var(--mig-blanco);
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio);
+  box-shadow: var(--mig-sombra);
+  padding: var(--mig-esp-5);
+}
+
+.perfil__texto {
+  color: var(--mig-apagado);
+  line-height: var(--mig-linea);
+}
+
+.perfil__datos {
+  margin: 0 0 var(--mig-esp-5);
+}
+
+.perfil__fila {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--mig-esp-3);
+  padding-block: var(--mig-esp-2);
+  border-bottom: 1px solid var(--mig-borde);
+}
+
+.perfil__fila:last-child {
+  border-bottom: 0;
+}
+
+.perfil__fila dt {
+  color: var(--mig-apagado);
+  font-weight: var(--mig-peso-medio);
+}
+
+.perfil__fila dd {
+  margin: 0;
+  color: var(--mig-tinta);
+  text-align: right;
+}
+
+.perfil__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mig-esp-2);
+}
+
+@media (max-width: 575.98px) {
+  .perfil {
+    padding: var(--mig-esp-4);
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+}
+
 
 /* ==========================================================================
    6. UTILIDADES

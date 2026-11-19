@@ -1,22 +1,68 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import Pagina from "../components/Pagina";
+import { cerrarSesion, leerUsuario } from "../services/sesion";
 
-// Placeholder de la cuenta. Se deja como esta a proposito: la app es publica y
-// la cuenta es opcional, asi que esto no debe verse como un error.
+// La cuenta es opcional: sin sesión, esta página invita a entrar. Con sesión,
+// muestra los datos públicos que guardó el login.
 export default function Perfil() {
+  const navegar = useNavigate();
+  const usuario = leerUsuario();
+
+  function salir() {
+    cerrarSesion();
+    navegar("/");
+  }
+
+  if (!usuario) {
+    return (
+      <Pagina
+        titulo="Mi cuenta"
+        descripcion="La cuenta es opcional: MigrApp funciona completa sin registrarte."
+      >
+        <div className="perfil">
+          <p className="perfil__texto">
+            Inicia sesión o crea una cuenta para ver tus datos aquí.
+          </p>
+          <div className="perfil__acciones">
+            <Button as={Link} to="/login" variant="primary" size="sm">
+              Iniciar sesión
+            </Button>
+            <Button as={Link} to="/registro" variant="outline-primary" size="sm">
+              Registrarme
+            </Button>
+          </div>
+        </div>
+      </Pagina>
+    );
+  }
+
   return (
     <Pagina
-      titulo="Mi cuenta"
-      descripcion="Todavía no hay nada que guardar aquí. MigrApp funciona completa sin cuenta."
+      titulo={`Hola, ${usuario.nombre}`}
+      descripcion="Esta es la información de tu cuenta."
     >
-      <div className="directorio__vacio">
-        <p className="mb-3">
-          Pronto podrás guardar tu progreso en los trámites y tus lugares
-          favoritos.
-        </p>
-        <Link to="/regularizate" className="btn btn-primary btn-sm">
-          Ir a Regularízate
-        </Link>
+      <div className="perfil">
+        <dl className="perfil__datos">
+          <div className="perfil__fila">
+            <dt>Nombre</dt>
+            <dd>
+              {usuario.nombre} {usuario.apellido}
+            </dd>
+          </div>
+          <div className="perfil__fila">
+            <dt>Correo</dt>
+            <dd>{usuario.correo}</dd>
+          </div>
+        </dl>
+        <div className="perfil__acciones">
+          <Button as={Link} to="/regularizate" variant="primary" size="sm">
+            Ir a Regularízate
+          </Button>
+          <Button variant="outline-primary" size="sm" onClick={salir}>
+            Cerrar sesión
+          </Button>
+        </div>
       </div>
     </Pagina>
   );

@@ -1,16 +1,19 @@
+import { useState } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { cerrarSesion, leerUsuario } from "../services/sesion";
 
-// Las 5 secciones de la app. Cambiar aqui cambia el menu en toda la app.
+// Las secciones de la app. Cambiar aquí cambia el menú en toda la app.
 const secciones = [
   { to: "/", texto: "Inicio" },
   { to: "/regularizate", texto: "Regularízate" },
   { to: "/documentos", texto: "Documentos" },
   { to: "/empleo", texto: "Empleo" },
   { to: "/donde-ir", texto: "Dónde ir" },
+  { to: "/asistente", texto: "Asistente" },
 ];
 
-// Icono de aviso reutilizado por el boton de emergencia.
+// Icono de aviso reutilizado por el botón de emergencia.
 function IconoAviso() {
   return (
     <svg
@@ -27,6 +30,17 @@ function IconoAviso() {
 }
 
 export default function Menu() {
+  const navegar = useNavigate();
+  // Fuerza un re-render al cerrar sesión aunque ya estemos en "/".
+  const [, setVersion] = useState(0);
+  const usuario = leerUsuario();
+
+  function salir() {
+    cerrarSesion();
+    setVersion((v) => v + 1);
+    navegar("/");
+  }
+
   return (
     <Navbar expand="lg" sticky="top" className="menu">
       <Container>
@@ -34,10 +48,10 @@ export default function Menu() {
           MigrApp
         </Navbar.Brand>
 
-        {/* En movil el colapsable esconde los enlaces, pero "Ayuda urgente" no
-            puede quedar detras del hamburguesa: es la salida de quien esta en
-            crisis. Se renderiza aqui fuera y se oculta en lg, donde la misma
-            accion vive dentro del colapsable. */}
+        {/* En móvil el colapsable esconde los enlaces, pero "Ayuda urgente" no
+            puede quedar detrás del hamburguesa: es la salida de quien está en
+            crisis. Se renderiza aquí fuera y se oculta en lg, donde la misma
+            acción vive dentro del colapsable. */}
         <Button
           as={Link}
           to="/ayuda"
@@ -54,8 +68,8 @@ export default function Menu() {
         <Navbar.Collapse id="menu-principal">
           <Nav className="me-auto">
             {secciones.map((s) => (
-              // NavLink marca la pagina actual; la clase "activo" la pone el
-              // propio router y es la que underlines en .menu__enlace::after.
+              // NavLink marca la página actual; la clase "activo" la pone el
+              // propio router y es la que subraya en .menu__enlace::after.
               <Nav.Link
                 as={NavLink}
                 to={s.to}
@@ -80,15 +94,38 @@ export default function Menu() {
               <IconoAviso />
               <span className="ms-1">Ayuda urgente</span>
             </Button>
-            <Button
-              as={Link}
-              to="/login"
-              variant="outline-light"
-              size="sm"
-              className="menu__cuenta"
-            >
-              Entrar
-            </Button>
+
+            {usuario ? (
+              <>
+                <Button
+                  as={Link}
+                  to="/perfil"
+                  variant="outline-light"
+                  size="sm"
+                  className="menu__cuenta"
+                >
+                  Mi cuenta
+                </Button>
+                <Button
+                  variant="outline-light"
+                  size="sm"
+                  className="menu__cuenta"
+                  onClick={salir}
+                >
+                  Salir
+                </Button>
+              </>
+            ) : (
+              <Button
+                as={Link}
+                to="/login"
+                variant="outline-light"
+                size="sm"
+                className="menu__cuenta"
+              >
+                Entrar
+              </Button>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

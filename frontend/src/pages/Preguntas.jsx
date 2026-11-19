@@ -1,4 +1,5 @@
 import { Accordion } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Pagina from "../components/Pagina";
 
 const faqs = [
@@ -28,7 +29,7 @@ export default function Preguntas() {
   return (
     <Pagina
       titulo="Preguntas frecuentes"
-      descripcion="Las dudas que más nos llegan. Si la tuya no está aquí, revisa las secciones o escríbenos."
+      descripcion="Las dudas que más nos llegan. Si la tuya no está aquí, revisa las secciones o pregúntale al asistente."
     >
       <Accordion className="faq" alwaysOpen={false}>
         {faqs.map(([p, r], i) => (
@@ -38,6 +39,13 @@ export default function Preguntas() {
           </Accordion.Item>
         ))}
       </Accordion>
+
+      <div className="faq__cta">
+        <p>¿No encuentras tu duda? El asistente responde con la información de la app.</p>
+        <Link to="/asistente" className="btn btn-primary btn-sm">
+          Preguntar al asistente
+        </Link>
+      </div>
     </Pagina>
   );
 }
