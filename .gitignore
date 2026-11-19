@@ -1,0 +1,15 @@
+# Dependencias y artefactos de build
+node_modules/
+build/
+
+# Variables de entorno con secretos (.env.example sí se versiona)
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
