@@ -123,5 +123,3 @@ git push                     # subir al terminar
 ## Contenido
 
 Los trámites vigentes están en `frontend/src/data/tramites.js` con la fecha de verificación. Revisar y actualizar cuando cambie la normativa (Migración Colombia, Cancillería).
-
-La guía para la presentación del proyecto está en [`GUIA-PRESENTACION.md`](GUIA-PRESENTACION.md).
