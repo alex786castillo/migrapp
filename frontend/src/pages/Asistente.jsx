@@ -16,6 +16,17 @@ const SUGERENCIAS = [
   "Soy papá de un niño con PPT, ¿qué puedo hacer?",
 ];
 
+// Gemini a veces responde con Markdown. La burbuja muestra texto plano, así
+// que quitamos los marcadores más comunes y dejamos la URL legible.
+function textoPlano(texto) {
+  return texto
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, "$1 ($2)")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/__([^_]+)__/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/`([^`]+)`/g, "$1");
+}
+
 export default function Asistente() {
   const [mensajes, setMensajes] = useState([BIENVENIDA]);
   const [texto, setTexto] = useState("");
@@ -96,7 +107,9 @@ export default function Asistente() {
               <span className="asistente__autor">
                 {m.rol === "usuario" ? "Tú" : "Asistente"}
               </span>
-              <p className="asistente__texto">{m.texto}</p>
+              <p className="asistente__texto">
+                {m.rol === "asistente" ? textoPlano(m.texto) : m.texto}
+              </p>
             </div>
           ))}
 
