@@ -66,6 +66,8 @@ REACT_APP_API_URL=http://localhost:4001/api
 
 Se usan **dos proyectos de Vercel** sobre el mismo repositorio: uno para el frontend y otro para el backend. La base de datos va en **Neon**.
 
+> **Node.js en Vercel:** en **Settings → General → Node.js Version** de cada proyecto elige **26.x**. Vercel ya no acepta Node 18.x y el build falla con "invalid or discontinued Node.js Version".
+
 ### 1. Base de datos (Neon)
 
 1. Entra en [neon.tech](https://neon.tech), crea un proyecto y copia la cadena de conexión **pooler**.
