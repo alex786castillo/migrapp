@@ -1,22 +1,32 @@
-// Carga las variables del archivo .env en process.env
+// Conexión única a PostgreSQL.
+// Los datos NUNCA van escritos aquí: se leen de DATABASE_URL (.env local o
+// variables de entorno de Vercel/Neon).
 require('dotenv').config();
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 
-// Los datos de conexión NUNCA van escritos aquí: se leen del .env,
-// que está en .gitignore y no se sube a GitHub.
-const mysqlConnection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  console.warn(
+    'DATABASE_URL no está definida. Define la cadena de conexión de PostgreSQL en .env.'
+  );
+}
+
+// Neon y Supabase exigen SSL. En un PostgreSQL local se puede poner DB_SSL=false.
+const usarSSL = process.env.DB_SSL !== 'false';
+
+// Un pool reutiliza conexiones entre peticiones. En Vercel conviene usar la
+// cadena "pooler" de Neon (termina en -pooler) para no agotar el límite.
+const pool = new Pool({
+  connectionString,
+  ssl: usarSSL ? { rejectUnauthorized: false } : false,
+  max: 5,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
 });
 
-mysqlConnection.connect((err) => {
-    if (err) {
-        console.error('Error al conectar con MySQL:', err.message);
-        return;
-    }
-    console.log('Base de datos conectada!');
+pool.on('error', (err) => {
+  console.error('Error inesperado en PostgreSQL:', err.message);
 });
 
-module.exports = mysqlConnection;
+module.exports = pool;

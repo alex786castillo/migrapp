@@ -1,87 +1,110 @@
 const { Router } = require('express');
+const bcrypt = require('bcryptjs');
+const pool = require('../env/env');
+
 const router = Router();
-const mysqlConnection = require('../env/env');
 
-router.get('/', (req, res) => {
-  mysqlConnection.query('SELECT * FROM usuarios', (err, rows, fields) => {
-    if (!err) {
-      res.json(rows);
-    } else {
-      console.log(err);
-      res.status(500).json({ mensaje: 'Error interno del servidor' });
+const CORREO_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// POST /api/usuarios/registro
+//   cuerpo { nombre, apellido, correo, contrasena }
+//   éxito  201 { mensaje }
+//   fallo  400/409/500 { mensaje }
+router.post('/registro', async (req, res) => {
+  const { nombre, apellido, correo, contrasena } = req.body || {};
+
+  if (!nombre?.trim() || !apellido?.trim() || !correo?.trim() || !contrasena) {
+    return res.status(400).json({ mensaje: 'Completa todos los campos.' });
+  }
+
+  if (!CORREO_VALIDO.test(correo.trim())) {
+    return res
+      .status(400)
+      .json({ mensaje: 'El correo no tiene un formato válido.' });
+  }
+
+  if (contrasena.length < 8 || contrasena.length > 72) {
+    return res
+      .status(400)
+      .json({ mensaje: 'La contraseña debe tener entre 8 y 72 caracteres.' });
+  }
+
+  try {
+    const hash = await bcrypt.hash(contrasena, 10);
+
+    await pool.query(
+      `INSERT INTO usuarios (nombre, apellido, correo, contrasena_hash)
+       VALUES ($1, $2, $3, $4)`,
+      [
+        nombre.trim(),
+        apellido.trim(),
+        correo.trim().toLowerCase(),
+        hash,
+      ]
+    );
+
+    return res.status(201).json({ mensaje: 'Cuenta creada correctamente.' });
+  } catch (error) {
+    // 23505 = violación de índice único (correo repetido).
+    if (error.code === '23505') {
+      return res
+        .status(409)
+        .json({ mensaje: 'Ese correo ya está registrado.' });
     }
-  });
+
+    console.error('Error al registrar usuario:', error.message);
+    return res
+      .status(500)
+      .json({ mensaje: 'No pudimos crear la cuenta. Intenta de nuevo.' });
+  }
 });
 
-router.post('/autenticacion', (req, res) => {
-    try {
-      const txtusu = req.body.correo;
-      const txtpas = req.body.contraseña;
-      console.log("Correo y Contraseña recibidos:", txtusu, txtpas);
-  
-      // Corrige el nombre de la tabla a 'usuarios'
-      const sql = 'SELECT * FROM usuarios WHERE correo = ? AND contraseña = ?';
-  
-      mysqlConnection.query(sql, [txtusu, txtpas], (err, results) => {
-        console.log(txtusu, txtpas);
-        if (err) {
-          console.error(err);
-          res.status(500).json({ mensaje: 'Error interno del servidor' });
-          return;
-        }
-  
-        if (results.length > 0) {
-          res.json({ mensaje: 'Usuario autenticado correctamente' });
-          console.log("result -->", results);
-        } else {
-          res.status(401).json({ mensaje: 'Correo o contraseña incorrectos' });
-        }
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ mensaje: 'Error interno del servidor' });
+// POST /api/usuarios/autenticacion
+//   cuerpo { correo, contrasena }
+//   éxito  200 { mensaje, usuario }
+//   fallo  400/401/500 { mensaje }
+router.post('/autenticacion', async (req, res) => {
+  const { correo, contrasena } = req.body || {};
+
+  if (!correo?.trim() || !contrasena) {
+    return res
+      .status(400)
+      .json({ mensaje: 'Completa el correo y la contraseña.' });
+  }
+
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, nombre, apellido, correo, contrasena_hash
+       FROM usuarios
+       WHERE LOWER(correo) = LOWER($1)
+       LIMIT 1`,
+      [correo.trim()]
+    );
+
+    const usuario = rows[0];
+    const credencialesValidas =
+      usuario && (await bcrypt.compare(contrasena, usuario.contrasena_hash));
+
+    if (!credencialesValidas) {
+      // Mensaje genérico: no revelamos si el correo existe o no.
+      return res
+        .status(401)
+        .json({ mensaje: 'Correo o contraseña incorrectos.' });
     }
-  });
-  
-router.post('/registro', (req, res) => {
-  console.log(req.body);
-  const nombre = req.body[0];
-  const apellido = req.body[1];
-  const correo = req.body[2];
-  const contraseña = req.body[3];
 
-  let usuario = [nombre, apellido, correo, contraseña];
-
-  let nuevoUsuario = `
-        INSERT INTO usuarios(nombre, apellido, Correo, Contraseña) 
-        VALUES (?, ?, ?, ?)
-    `;
-
-  mysqlConnection.query(nuevoUsuario, usuario, (err, results, fields) => {
-    if (err) {
-      console.error(err.message);
-      return res.status(500).json({ message: 'Error al registrar el usuario' });
-    } else {
-      res.json({ message: `Se ha registrado otro usuario` });
-    }
-  });
-});
-
-router.post('/', (req, res) => {
-  const { Correo, Contraseña, Nombre_U, Apellido, Departamento, Ciudad, Ocupacion } = req.body;
-
-  let usuario = [Correo, Contraseña, Nombre_U, Apellido, Departamento, Ciudad, Ocupacion];
-
-  let nuevoUsuario = `INSERT INTO usuarios( Correo, Contraseña, Nombre_U, Apellido, Departamento, Ciudad, Ocupacion) 
-    VALUES( ?, SHA1(?),?,?,?,?,?)`;
-
-  mysqlConnection.query(nuevoUsuario, usuario, (err, results, fields) => {
-    if (err) {
-      return console.error(err.message);
-    } else {
-      res.json({ message: `se ha registrado otro usuario` });
-    }
-  });
+    return res.json({
+      mensaje: 'Usuario autenticado correctamente',
+      usuario: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        correo: usuario.correo,
+      },
+    });
+  } catch (error) {
+    console.error('Error al autenticar:', error.message);
+    return res.status(500).json({ mensaje: 'Error interno del servidor.' });
+  }
 });
 
 module.exports = router;
