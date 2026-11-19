@@ -4,7 +4,7 @@
 
 | Requisito | Cómo se cumple |
 |---|---|
-| **Aplicación publicada en una URL de internet** | Frontend en Vercel (`https://TU-FRONTEND.vercel.app`) + backend en Vercel + PostgreSQL en Neon. Nada corre en tu computador durante la presentación. |
+| **Aplicación publicada en una URL de internet** | Frontend en Vercel (`https://migrapp.vercel.app`) + backend en Vercel (`https://migrapp-api-co.vercel.app`) + PostgreSQL en Neon. Nada corre en tu computador durante la presentación. |
 | **Responsive (computador y celular)** | Bootstrap 5 + una hoja de estilos propia con medidas flexibles (`clamp`), menú colapsable y tabla de documentos que se convierte en tarjetas en móvil. El chat también se apila en pantallas pequeñas. |
 | **Repositorio en GitHub con mínimo 10 commits** | El repositorio ya supera los 20 commits. Verifícalo con `git log --oneline` o en la pestaña **Commits** de GitHub. |
 | **Explicar el código** | Esta guía incluye un guion con los tres puntos que suelen preguntar: componente reutilizado, cómo llegan los datos y la ruta de Express del formulario. |
@@ -46,7 +46,7 @@ Navegador
 7. **Registro y login:** crear una cuenta, iniciar sesión y mostrar «Mi cuenta».
 8. **Cerrar** recordando que la app orienta y no tramita ni guarda documentos.
 
-> Antes de presentar, abre la URL del backend (`/api/health`) para despertar la función de Vercel si estuvo inactiva.
+> Antes de presentar, abre `https://migrapp-api-co.vercel.app/api/health` para despertar la función de Vercel si estuvo inactiva.
 
 ## 4. Explicar el código: tres respuestas listas
 

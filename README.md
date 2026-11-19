@@ -66,6 +66,8 @@ REACT_APP_API_URL=http://localhost:4001/api
 
 Se usan **dos proyectos de Vercel** sobre el mismo repositorio: uno para el frontend y otro para el backend. La base de datos va en **Neon**.
 
+> **Despliegue actual:** frontend en `https://migrapp.vercel.app` y backend en `https://migrapp-api-co.vercel.app`.
+
 > **Node.js en Vercel:** en **Settings → General → Node.js Version** de cada proyecto elige **26.x**. Vercel ya no acepta Node 18.x y el build falla con "invalid or discontinued Node.js Version".
 
 ### 1. Base de datos (Neon)
@@ -82,18 +84,18 @@ También puedes crearla desde Vercel: **Storage → Create Database → Neon**.
 3. Variables de entorno:
    - `DATABASE_URL` = cadena de Neon (con `?sslmode=require`).
    - `DB_SSL` = `true`.
-   - `CORS_ORIGIN` = `http://localhost:3000,https://TU-FRONTEND.vercel.app`.
+   - `CORS_ORIGIN` = `https://migrapp.vercel.app,http://localhost:3000`.
    - `GEMINI_API_KEY` = tu clave de Google AI Studio.
    - `GEMINI_MODEL` = `gemini-3.5-flash-lite` (opcional).
-4. **Deploy**. Anota la URL, por ejemplo `https://migrapp-api.vercel.app`.
-5. Prueba `https://migrapp-api.vercel.app/api/health`.
+4. **Deploy**. Anota la URL, por ejemplo `https://migrapp-api-co.vercel.app`.
+5. Prueba `https://migrapp-api-co.vercel.app/api/health`.
 
 ### 3. Frontend en Vercel
 
 1. **Add New → Project** e importa el mismo repositorio.
 2. **Root Directory:** `frontend`.
 3. Variable de entorno:
-   - `REACT_APP_API_URL` = `https://migrapp-api.vercel.app/api`.
+   - `REACT_APP_API_URL` = `https://migrapp-api-co.vercel.app/api`.
 4. **Deploy**. La URL pública será algo como `https://migrapp.vercel.app`.
 
 `frontend/vercel.json` incluye la regla de React Router para que recargar `/documentos` o `/asistente` no dé 404.
