@@ -4,11 +4,16 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 
-const connectionString = process.env.DATABASE_URL;
+// La integración de Neon en Vercel puede guardar la cadena con distintos
+// nombres según cómo se cree. Aceptamos los más habituales.
+const connectionString =
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.NEON_DATABASE_URL;
 
 if (!connectionString) {
   console.warn(
-    'DATABASE_URL no está definida. Define la cadena de conexión de PostgreSQL en .env.'
+    'Falta DATABASE_URL (o POSTGRES_URL / NEON_DATABASE_URL). Define la cadena de conexión de PostgreSQL.'
   );
 }
 
