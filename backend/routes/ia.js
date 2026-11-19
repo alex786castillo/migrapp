@@ -18,7 +18,9 @@ const limitador = rateLimit({
   },
 });
 
-const MODELO = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+// Modelo vigente y económico. Los modelos 2.5 están descontinuados para
+// cuentas nuevas desde 2026; este es el recomendado para proyectos nuevos.
+const MODELO = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
 
 function instruccion() {
   const hoy = new Date().toLocaleDateString('es-CO', {

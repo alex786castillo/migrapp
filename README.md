@@ -84,7 +84,7 @@ También puedes crearla desde Vercel: **Storage → Create Database → Neon**.
    - `DB_SSL` = `true`.
    - `CORS_ORIGIN` = `http://localhost:3000,https://TU-FRONTEND.vercel.app`.
    - `GEMINI_API_KEY` = tu clave de Google AI Studio.
-   - `GEMINI_MODEL` = `gemini-2.5-flash` (opcional).
+   - `GEMINI_MODEL` = `gemini-3.5-flash-lite` (opcional).
 4. **Deploy**. Anota la URL, por ejemplo `https://migrapp-api.vercel.app`.
 5. Prueba `https://migrapp-api.vercel.app/api/health`.
 
