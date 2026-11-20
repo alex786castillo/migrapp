@@ -10,7 +10,7 @@ Guía práctica para migrantes venezolanos en Colombia: trámites de regularizac
 
 ## Requisitos
 
-- Node.js 18 o superior
+- Node.js 26 (versión configurada en `package.json` y en Vercel)
 - Git
 - PostgreSQL 14 o superior (local, Neon o Supabase)
 - Una API key gratuita de [Google AI Studio](https://aistudio.google.com/apikey) (solo para el chat)
