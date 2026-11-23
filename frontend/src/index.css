@@ -577,11 +577,24 @@ a {
 }
 
 .menu__marca {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--mig-fuente-titulo);
   font-weight: var(--mig-peso-titulo);
   font-size: var(--mig-texto-xl);
   letter-spacing: 0.01em;
   color: var(--mig-blanco);
+}
+
+/* El avion ocupa el lugar de la "a" de Migra. El tamano va en em para que
+   crezca y encoja junto con la marca en cualquier breakpoint. */
+.marca__ala {
+  display: block;
+  flex: none;
+  width: 0.84em;
+  height: 0.84em;
+  margin: 0 0.02em;
+  transform: translateY(0.02em);
 }
 
 .menu__marca:hover,
@@ -806,6 +819,15 @@ a {
   padding: var(--mig-esp-5);
 }
 
+/* Icono decorativo: el titulo de la tarjeta ya dice a donde lleva. */
+.acceso__icono {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: var(--mig-esp-3);
+  object-fit: contain;
+}
+
 .acceso__titulo {
   font-size: var(--mig-texto-lg);
   font-weight: var(--mig-peso-fuerte);
@@ -829,6 +851,30 @@ a {
 
 .acceso:hover .acceso__flecha {
   transform: translateX(3px);
+}
+
+/* En una sola columna la tarjeta se lee mejor con el icono a la izquierda:
+   ocupa menos alto y el pulgar llega antes al enlace. */
+@media (max-width: 767.98px) {
+  .acceso__cuerpo {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    column-gap: var(--mig-esp-3);
+    align-items: start;
+    padding: var(--mig-esp-4);
+  }
+
+  .acceso__icono {
+    grid-row: 1 / span 2;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 0;
+  }
+
+  .acceso__titulo,
+  .acceso__texto {
+    grid-column: 2;
+  }
 }
 
 /* --- 5.6 tarjeta-tramite · fichas de la guia ---------------------------- */

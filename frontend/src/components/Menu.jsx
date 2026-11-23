@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { cerrarSesion, leerUsuario } from "../services/sesion";
+import Marca from "./Marca";
 
 // Las secciones de la app. Cambiar aquí cambia el menú en toda la app.
 const secciones = [
@@ -44,8 +45,13 @@ export default function Menu() {
   return (
     <Navbar expand="lg" sticky="top" className="menu">
       <Container>
-        <Navbar.Brand as={Link} to="/" className="menu__marca">
-          MigrApp
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className="menu__marca"
+          aria-label="MigrApp, inicio"
+        >
+          <Marca />
         </Navbar.Brand>
 
         {/* En móvil el colapsable esconde los enlaces, pero "Ayuda urgente" no

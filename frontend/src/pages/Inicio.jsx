@@ -1,33 +1,44 @@
 import { Link } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import portadaImagen from "../images/venezolanos.jpg";
+import iconoRegularizate from "../images/iconos/regularizate.png";
+import iconoDocumentos from "../images/iconos/documentos.png";
+import iconoEmpleo from "../images/iconos/empleo.png";
+import iconoDondeIr from "../images/iconos/donde-ir.png";
+import iconoAyuda from "../images/iconos/ayuda.png";
 
 // El inicio es un "hub": una pregunta y tarjetas grandes hacia cada seccion.
+// Cada acceso lleva su icono, pero el texto sigue siendo la etiqueta principal.
 const accesos = [
   {
     to: "/regularizate",
     titulo: "Quiero regularizarme",
     texto: "Descubre qué permiso o visa te sirve y cómo pedirlo.",
+    icono: iconoRegularizate,
   },
   {
     to: "/documentos",
     titulo: "Mis documentos venezolanos",
     texto: "Qué vale en Colombia: pasaporte vencido, cédula, títulos.",
+    icono: iconoDocumentos,
   },
   {
     to: "/empleo",
     titulo: "Quiero trabajar",
     texto: "Qué permisos te dejan trabajar formal y dónde buscar.",
+    icono: iconoEmpleo,
   },
   {
     to: "/donde-ir",
     titulo: "Dónde ir",
     texto: "Migración Colombia, salud, atención a migrantes en tu ciudad.",
+    icono: iconoDondeIr,
   },
   {
     to: "/ayuda",
     titulo: "Necesito ayuda ahora",
     texto: "Líneas y organizaciones que atienden migrantes.",
+    icono: iconoAyuda,
   },
 ];
 
@@ -79,6 +90,14 @@ export default function Inicio() {
           <Col key={a.to} className="d-flex">
             <Link to={a.to} className="acceso animar-entrada">
               <div className="acceso__cuerpo">
+                <img
+                  className="acceso__icono"
+                  src={a.icono}
+                  alt=""
+                  aria-hidden="true"
+                  width="64"
+                  height="64"
+                />
                 <div className="acceso__titulo">
                   {a.titulo}
                   <Flecha />
