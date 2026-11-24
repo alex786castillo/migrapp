@@ -34,22 +34,23 @@
        sistema: se reemplaza por su clase propia.
 
    Contraste verificado con WCAG 2.1. Los roles de texto pasan AA (>= 4.5:1)
-   sobre --mig-superficie (crema) como sobre el blanco de las tarjetas.
-   La cifra de la izquierda es sobre crema, la de la derecha sobre blanco:
+   sobre --mig-superficie (blanco calido) como sobre la superficie calida de
+   las tarjetas. La cifra de la izquierda es sobre el fondo de pagina, la de
+   la derecha sobre la tarjeta:
 
-     tinta            9.13 / 11.04
-     apagado          5.07 /  6.14
-     primario         7.19 /  8.70
-     primario-fuerte 12.01 / 14.53
-     exito            6.71 /  8.12
-     peligro          5.02 /  6.07
-     aviso-texto      5.00 /  6.05
+     tinta           10.15 / 10.88
+     apagado          5.64 /  6.05
+     primario         8.00 /  8.57
+     primario-fuerte 13.35 / 14.31
+     exito            7.46 /  8.00
+     peligro          5.58 /  5.98
+     aviso-texto      5.56 /  5.96
 
    LOS COLORES DE MARCA NO SIRVEN COMO TEXTO, solo como relleno con texto
-   blanco encima: el magenta da 3.74:1 sobre crema, y sobre el amarillo el
-   blanco no llega (1.45:1). Por eso el acento y el aviso tienen ademas su
-   version oscura para usarse como texto. Antes de darle un uso a un color
-   nuevo, comprueba las dos columnas.
+   blanco encima: el magenta da 4.16:1 sobre el fondo calido (aun por debajo
+   de 4.5:1), y sobre el amarillo el blanco no llega (1.45:1). Por eso el
+   acento y el aviso tienen ademas su version oscura para usarse como texto.
+   Antes de darle un uso a un color nuevo, comprueba las dos columnas.
    ========================================================================== */
 
 
@@ -79,26 +80,49 @@
   --mig-primario-suave: #e8edf6; /* fondos de subtitulo, chips */
   --mig-primario-borde: #99acc0;
 
-  /* Acento: SOLO como fondo, jamas como texto. El magenta puro sobre crema
-     da 3.74:1, por debajo del 4.5:1 que exige WCAG AA. Sobre el, el texto
-     tiene que ser blanco (4.53:1). Para texto de acento existe
-     --mig-acento-fuerte (8.19:1 sobre --mig-acento-suave). */
+  /* Acento: SOLO como fondo, jamas como texto. El magenta puro sobre el
+     fondo calido da 4.16:1, por debajo del 4.5:1 que exige WCAG AA. Sobre
+     el, el texto tiene que ser blanco (4.53:1). Para texto de acento existe
+     --mig-acento-fuerte (8.72:1 sobre el fondo de pagina). */
   --mig-acento: #db3069;
   --mig-acento-fuerte: #831d3f;
   --mig-acento-suave: #fbeaf0;
+  --mig-acento-borde: #efd4de; /* separa la ayuda urgente sin gritar */
 
   /* --- Neutros -------------------------------------------------------- */
   --mig-tinta: #3c3c3b;
   --mig-apagado: #62625c; /* descripciones, pie, apoyo */
-  --mig-superficie: #ebebd3; /* fondo de pagina. Las tarjetas van en blanco. */
-  --mig-borde: #bbbbaa; /* decorativo: separa, no delimita un control */
+  --mig-superficie: #f8f5ef; /* fondo de pagina, blanco calido */
+  --mig-tarjeta: #fffdfa; /* superficie de tarjetas y pie, un paso mas clara */
+  --mig-borde: #e8ded2; /* decorativo: separa, no delimita un control */
   /* El borde de un campo tiene que llegar a 3:1 (WCAG 1.4.11). Este valor
-     esta calculado contra la CREMA, no contra el blanco: los campos no solo
-     viven sobre tarjetas, y la crema es el de los dos fondos mas oscuro, asi
-     que cumplirla alli cubre los dos casos. Contra crema 3.21, contra
-     blanco 3.88. */
+     esta calculado contra el fondo de pagina, no contra la tarjeta: los
+     campos no solo viven sobre tarjetas, y el fondo calido es el de los dos
+     mas oscuro, asi que cumplirla alli cubre los dos casos. Contra el fondo
+     3.56, contra la tarjeta 3.82. */
   --mig-borde-fuerte: #828278;
   --mig-blanco: #ffffff;
+
+  /* Matices calidos del hero y de la banda del asistente. No son colores de
+     marca: son mezclas claras del magenta y del durazno que solo se usan
+     como fondo, nunca como texto. */
+  --mig-calido-claro: #fffaf3;
+  --mig-calido-medio: #fdf4ec;
+  --mig-calido-rosa: #faeef1;
+  --mig-calido-durazno: #fff8f2;
+
+  /* Tintes de los tiles del inicio. Son fondos decorativos: no llevan texto
+     encima, asi que no entran en la tabla de contraste. */
+  --mig-tono-azul: #e9eff9;
+  --mig-tono-azul-borde: #dbe5f4;
+  --mig-tono-oro: #fbf3d3;
+  --mig-tono-oro-borde: #f2e5b2;
+  --mig-tono-rosa: #fbe9ef;
+  --mig-tono-rosa-borde: #f4d3df;
+  --mig-tono-verde: #e9f1ec;
+  --mig-tono-verde-borde: #d7e7dd;
+  --mig-tono-durazno: #fdeee3;
+  --mig-tono-durazno-borde: #f5dcc8;
 
   /* --- Semanticos -----------------------------------------------------
      Cada estado trae cuatro formas porque no todas sirven para lo mismo:
@@ -122,7 +146,7 @@
   --mig-peligro-borde: #efa2bc;
 
   --mig-aviso: #f5d547; /* relleno: texto con --mig-tinta, nunca blanco */
-  --mig-aviso-texto: #716221; /* el mismo aviso como texto sobre crema */
+  --mig-aviso-texto: #716221; /* el mismo aviso como texto sobre el fondo calido */
   --mig-aviso-suave: #fae89a;
   --mig-aviso-borde: #bea743;
 
@@ -167,11 +191,14 @@
   --mig-radio: 0.5rem;
   --mig-radio-sm: 0.35rem;
   --mig-radio-lg: 0.75rem;
+  --mig-radio-xl: 1.125rem;
+  --mig-radio-2xl: 1.625rem;
   --mig-radio-pill: 50rem;
 
-  --mig-sombra: 0 1px 2px rgb(60 60 59 / 7%), 0 4px 12px rgb(60 60 59 / 9%);
-  --mig-sombra-sm: 0 1px 2px rgb(60 60 59 / 7%);
-  --mig-sombra-lg: 0 4px 8px rgb(60 60 59 / 9%), 0 12px 28px rgb(60 60 59 / 14%);
+  --mig-sombra: 0 1px 2px rgb(60 45 35 / 4%), 0 10px 28px rgb(60 45 35 / 7%);
+  --mig-sombra-sm: 0 1px 2px rgb(60 45 35 / 4%);
+  --mig-sombra-lg: 0 2px 4px rgb(60 45 35 / 5%),
+    0 18px 38px rgb(60 45 35 / 11%);
 
   /* --- Ritmo ---------------------------------------------------------- */
   --mig-esp-1: 0.25rem;
@@ -223,6 +250,11 @@
   --bs-primary-rgb: 20, 70, 160;
   --bs-link-color: var(--mig-primario);
   --bs-link-hover-color: var(--mig-primario-fuerte);
+  /* Bootstrap 5.3 pinta los <a> con --bs-link-color-rgb, no con
+     --bs-link-color. Sin estos dos, un enlace sin clase propia salia con el
+     azul de fabrica (#0d6efd) y sobre la tarjeta calida bajaba a 4.43:1. */
+  --bs-link-color-rgb: 20, 70, 160;
+  --bs-link-hover-color-rgb: 11, 39, 88;
 
   --bs-body-bg: var(--mig-superficie);
   --bs-body-color: var(--mig-tinta);
@@ -576,6 +608,16 @@ a {
   --bs-navbar-toggler-icon-bg: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
+/* La barra usa el mismo ancho y el mismo aire lateral que .app__principal,
+   para que la marca y los enlaces queden alineados con el contenido. Bootstrap
+   fija .container en 1320px como maximo; aqui se sube al tope de la app. */
+.menu > .container {
+  width: 100%;
+  max-width: var(--mig-ancho-max);
+  padding-right: var(--mig-gutter);
+  padding-left: var(--mig-gutter);
+}
+
 .menu__marca {
   display: inline-flex;
   align-items: center;
@@ -701,7 +743,7 @@ a {
 
 .pie {
   flex-shrink: 0;
-  background: var(--mig-blanco);
+  background: var(--mig-tarjeta);
   border-top: 1px solid var(--mig-borde);
   padding-block: var(--mig-esp-5);
   font-size: var(--mig-texto-sm);
@@ -711,6 +753,11 @@ a {
   color: var(--mig-apagado);
   max-width: var(--mig-medida);
   margin-bottom: var(--mig-esp-2);
+}
+
+.pie__aviso a {
+  color: var(--mig-primario);
+  font-weight: var(--mig-peso-medio);
 }
 
 .pie__enlaces {
@@ -724,80 +771,410 @@ a {
   font-weight: var(--mig-peso-medio);
 }
 
-/* --- 5.4 inicio-portada · encabezado con imagen -------------------------- */
+/* --- 5.4 portada · encabezado con imagen --------------------------------
+   El hero deja de ser una franja azul oscura con la foto de fondo y pasa a
+   ser una pieza partida: texto a la izquierda, foto a color a la derecha.
+   Sigue siendo el unico h1 de la pagina y el unico sitio con la condensada
+   grande; el resto del inicio usa Noto Sans para bajar el tono.
+   ---------------------------------------------------------------------- */
 
 .portada {
   position: relative;
-  overflow: hidden;
-  border-radius: var(--mig-radio-lg);
-  background: var(--mig-primario-fuerte);
-  color: var(--mig-blanco);
+  display: grid;
+  grid-template-columns: minmax(0, 1.03fr) minmax(0, 0.97fr);
+  gap: 1.625rem;
+  padding: 1.125rem;
   margin-bottom: var(--mig-esp-6);
+  overflow: hidden;
+  border: 1px solid var(--mig-borde);
+  border-radius: var(--mig-radio-2xl);
+  background: radial-gradient(
+    115% 150% at 0% 0%,
+    var(--mig-calido-claro) 0%,
+    var(--mig-calido-medio) 48%,
+    var(--mig-calido-rosa) 100%
+  );
+  box-shadow: 0 2px 4px rgb(60 45 35 / 3%), 0 20px 44px rgb(60 45 35 / 7%);
 }
 
-.portada__media {
+/* Halo magenta detras del texto. Puro adorno: no recibe puntero ni foco. */
+.portada::before {
+  content: "";
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.32;
+  top: -190px;
+  right: 34%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgb(219 48 105 / 14%),
+    rgb(219 48 105 / 0%) 70%
+  );
+  pointer-events: none;
 }
 
 .portada__contenido {
   position: relative;
-  padding: var(--mig-esp-7) var(--mig-esp-5);
-  max-width: 46rem;
+  z-index: 1;
+  align-self: center;
+  padding: 1.5rem 1.125rem 1.5rem 1.75rem;
+}
+
+.portada__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--mig-esp-2);
+  margin: 0 0 0.875rem;
+  color: var(--mig-acento-fuerte);
+  font-size: 0.72rem;
+  font-weight: var(--mig-peso-fuerte);
+  letter-spacing: 0.105em;
+  text-transform: uppercase;
+}
+
+.portada__eyebrow::before {
+  content: "";
+  flex: none;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 50%;
+  background: var(--mig-acento);
 }
 
 .portada__titulo {
-  font-size: var(--mig-texto-3xl);
-  line-height: var(--mig-linea-corta);
+  margin: 0 0 1rem;
+  color: var(--mig-tinta);
+  font-size: clamp(2.75rem, 4.7vw, 3.75rem);
   font-weight: var(--mig-peso-titulo);
-  color: var(--mig-blanco);
-  margin-bottom: var(--mig-esp-3);
+  line-height: 0.99;
+  letter-spacing: 0.002em;
 }
 
-.portada__texto {
-  font-size: var(--mig-texto-lg);
-  color: rgb(255 255 255 / 88%);
-  margin-bottom: 0;
+.portada__subrayado {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
 }
 
-.portada__insignias {
+.portada__trazo {
+  position: absolute;
+  left: 1%;
+  bottom: -0.3125rem;
+  width: 98%;
+  height: 0.875rem;
+  overflow: visible;
+  color: var(--mig-acento);
+  pointer-events: none;
+}
+
+.portada__entrada {
+  max-width: 49ch;
+  margin: 0 0 1.5rem;
+  color: var(--mig-apagado);
+  font-size: 1.03rem;
+  line-height: 1.68;
+}
+
+.portada__acciones {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--mig-esp-2);
-  margin-bottom: var(--mig-esp-4);
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 1.125rem;
 }
 
-.portada__insignia {
-  display: inline-block;
-  padding: var(--mig-esp-1) var(--mig-esp-3);
+/* Botones propios del hero. No se reutiliza .btn de Bootstrap porque estos
+   son pastillas con otro ritmo; el contraste se verifica igual que el resto:
+   blanco sobre magenta 4.53:1, tinta sobre fondo claro 10:1. */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.3125rem;
+  border: 1px solid transparent;
   border-radius: var(--mig-radio-pill);
-  background: rgb(255 255 255 / 16%);
-  border: 1px solid rgb(255 255 255 / 28%);
-  font-size: var(--mig-texto-xs);
+  font-size: 0.90625rem;
+  font-weight: var(--mig-peso-fuerte);
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background-color var(--mig-dur-rapida) var(--mig-curva),
+    border-color var(--mig-dur-rapida) var(--mig-curva),
+    color var(--mig-dur-rapida) var(--mig-curva),
+    transform var(--mig-dur-rapida) var(--mig-curva),
+    box-shadow var(--mig-dur-rapida) var(--mig-curva);
+}
+
+.boton svg {
+  flex: none;
+}
+
+.boton--acento {
+  background: var(--mig-acento);
+  border-color: var(--mig-acento);
+  color: var(--mig-blanco);
+  box-shadow: 0 8px 18px rgb(219 48 105 / 22%);
+}
+
+.boton--acento:hover,
+.boton--acento:focus-visible {
+  background: var(--mig-acento-fuerte);
+  border-color: var(--mig-acento-fuerte);
+  color: var(--mig-blanco);
+  transform: translateY(-1px);
+}
+
+/* El borde usa --mig-borde-fuerte, no un tono decorativo: el contorno de un
+   control tiene que llegar a 3:1 (WCAG 1.4.11). */
+.boton--claro {
+  background: rgb(255 253 250 / 76%);
+  border-color: var(--mig-borde-fuerte);
+  color: var(--mig-tinta);
+}
+
+.boton--claro:hover,
+.boton--claro:focus-visible {
+  background: var(--mig-tarjeta);
+  border-color: var(--mig-acento-fuerte);
+  color: var(--mig-acento-fuerte);
+}
+
+.portada__confianza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4375rem;
+  margin: 0;
+  color: var(--mig-apagado);
+  font-size: 0.78125rem;
   font-weight: var(--mig-peso-medio);
 }
 
-@media (max-width: 575.98px) {
+.portada__confianza svg {
+  flex: none;
+  color: var(--mig-exito);
+}
+
+.portada__separador {
+  color: var(--mig-borde-fuerte);
+  font-weight: var(--mig-peso-normal);
+}
+
+.portada__foto {
+  position: relative;
+  min-width: 0;
+  min-height: 25.25rem;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--mig-radio-xl);
+  background: var(--mig-borde);
+  box-shadow: inset 0 0 0 1px rgb(60 45 35 / 6%);
+}
+
+.portada__foto img {
+  width: 100%;
+  height: 100%;
+  min-height: 25.25rem;
+  object-fit: cover;
+  object-position: 38% 28%;
+  filter: saturate(0.94) contrast(1.02);
+}
+
+/* Velo inferior muy leve: asienta la cita sin apagar la foto. */
+.portada__foto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(131 29 63 / 2%) 38%,
+    rgb(131 29 63 / 16%) 100%
+  );
+  pointer-events: none;
+}
+
+.portada__cita {
+  position: absolute;
+  z-index: 1;
+  left: 1rem;
+  bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mig-esp-2);
+  max-width: calc(100% - 2rem);
+  padding: 0.5625rem 0.875rem 0.5625rem 0.6875rem;
+  border-radius: var(--mig-radio-pill);
+  background: rgb(255 253 250 / 93%);
+  color: var(--mig-tinta);
+  font-size: 0.78125rem;
+  font-weight: var(--mig-peso-medio);
+  box-shadow: 0 6px 18px rgb(60 45 35 / 16%);
+  backdrop-filter: blur(4px);
+}
+
+.portada__cita svg {
+  flex: none;
+  color: var(--mig-acento);
+}
+
+@media (max-width: 1080px) {
+  .portada {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+
   .portada__contenido {
-    padding: var(--mig-esp-6) var(--mig-esp-4);
+    padding-left: 1rem;
   }
 }
 
-/* --- 5.5 acceso · tarjetas grandes del inicio ---------------------------- */
+@media (max-width: 920px) {
+  .portada {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+
+  .portada__contenido {
+    padding: 1.375rem 1.375rem 0.375rem;
+  }
+
+  .portada__foto {
+    min-height: 17.5rem;
+    margin: 0 0.5rem 0.5rem;
+  }
+
+  .portada__foto img {
+    min-height: 17.5rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .portada {
+    padding: 0.625rem;
+    border-radius: var(--mig-radio-xl);
+  }
+
+  .portada__contenido {
+    padding: 1rem 0.75rem 0.25rem;
+  }
+
+  .portada__titulo {
+    margin-bottom: 0.75rem;
+    font-size: 2.5625rem;
+  }
+
+  .portada__entrada {
+    margin-bottom: 1.25rem;
+    font-size: 0.9375rem;
+  }
+
+  .portada__acciones {
+    gap: 0.5rem;
+  }
+
+  .portada__acciones .boton {
+    width: 100%;
+  }
+
+  .boton {
+    padding: 0.6875rem 1.0625rem;
+    font-size: 0.84375rem;
+  }
+
+  .portada__foto {
+    min-height: 13.625rem;
+    margin: 0 0.25rem 0.25rem;
+    border-radius: 0.9375rem;
+  }
+
+  .portada__foto img {
+    min-height: 13.625rem;
+  }
+
+  .portada__cita {
+    left: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.5rem 0.75rem 0.5rem 0.5625rem;
+    font-size: 0.72rem;
+  }
+
+  /* Cuando la linea de confianza cae a dos renglones, el punto anterior a
+     "No guardamos..." quedaria colgando al final del primero. Se retira solo
+     en movil; las palabras siguen separadas por el espacio del flex. */
+  .portada__separador--fin {
+    display: none;
+  }
+}
+
+/* --- 5.5 inicio · tarjetas, seccion y asistente -------------------------- */
+
+.inicio__seccion {
+  padding-top: 2.125rem;
+}
+
+.inicio__cabecera {
+  margin-bottom: 1.125rem;
+}
+
+.inicio__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--mig-esp-2);
+  margin: 0 0 0.4375rem;
+  color: var(--mig-acento-fuerte);
+  font-size: 0.6875rem;
+  font-weight: var(--mig-peso-fuerte);
+  letter-spacing: 0.105em;
+  text-transform: uppercase;
+}
+
+.inicio__eyebrow::before {
+  content: "";
+  flex: none;
+  width: 1.375rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--mig-acento);
+}
+
+/* Noto Sans 700 solo aqui: el hero y la marca conservan la condensada. */
+.inicio__titulo {
+  margin: 0 0 0.3125rem;
+  color: var(--mig-tinta);
+  font-family: var(--mig-fuente);
+  font-size: clamp(1.625rem, 2.5vw, 2rem);
+  font-weight: var(--mig-peso-fuerte);
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+}
+
+.inicio__baja {
+  margin: 0;
+  color: var(--mig-apagado);
+  font-size: var(--mig-texto-sm);
+}
+
+.inicio__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
 
 .acceso {
-  display: block;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
-  background: var(--mig-blanco);
+  --acceso-tono: var(--mig-tono-azul);
+  --acceso-tono-borde: var(--mig-tono-azul-borde);
+
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 13.375rem;
+  padding: 1.375rem 1.375rem 1.5rem;
+  background: var(--mig-tarjeta);
   border: 1px solid var(--mig-borde);
-  border-radius: var(--mig-radio);
+  border-radius: var(--mig-radio-xl);
   box-shadow: var(--mig-sombra-sm);
+  color: var(--mig-tinta);
+  text-decoration: none;
   transition: transform var(--mig-dur) var(--mig-curva),
     box-shadow var(--mig-dur) var(--mig-curva),
     border-color var(--mig-dur) var(--mig-curva);
@@ -806,74 +1183,341 @@ a {
 .acceso:hover,
 .acceso:focus-visible {
   transform: translateY(-3px);
-  box-shadow: var(--mig-sombra);
-  border-color: var(--mig-primario-borde);
-  color: inherit;
+  box-shadow: var(--mig-sombra-lg);
+  border-color: var(--mig-acento-borde);
+  color: var(--mig-tinta);
 }
 
 .acceso:active {
   transform: translateY(-1px);
 }
 
-.acceso__cuerpo {
-  padding: var(--mig-esp-5);
+/* El tono solo vive en el tile: no codifica informacion, es ambiente. */
+.acceso--azul {
+  --acceso-tono: var(--mig-tono-azul);
+  --acceso-tono-borde: var(--mig-tono-azul-borde);
+}
+
+.acceso--oro {
+  --acceso-tono: var(--mig-tono-oro);
+  --acceso-tono-borde: var(--mig-tono-oro-borde);
+}
+
+.acceso--rosa {
+  --acceso-tono: var(--mig-tono-rosa);
+  --acceso-tono-borde: var(--mig-tono-rosa-borde);
+}
+
+.acceso--verde {
+  --acceso-tono: var(--mig-tono-verde);
+  --acceso-tono-borde: var(--mig-tono-verde-borde);
+}
+
+.acceso--durazno {
+  --acceso-tono: var(--mig-tono-durazno);
+  --acceso-tono-borde: var(--mig-tono-durazno-borde);
+}
+
+.acceso__tile {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3.75rem;
+  height: 3.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--acceso-tono-borde);
+  border-radius: var(--mig-radio-xl);
+  background: var(--acceso-tono);
 }
 
 /* Icono decorativo: el titulo de la tarjeta ya dice a donde lleva. */
 .acceso__icono {
   display: block;
-  width: 4rem;
-  height: 4rem;
-  margin-bottom: var(--mig-esp-3);
+  width: 2.625rem;
+  height: 2.625rem;
+  margin: 0;
   object-fit: contain;
 }
 
+.acceso__cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .acceso__titulo {
-  font-size: var(--mig-texto-lg);
-  font-weight: var(--mig-peso-fuerte);
-  color: var(--mig-primario-fuerte);
-  margin-bottom: var(--mig-esp-2);
   display: flex;
   align-items: center;
   gap: var(--mig-esp-2);
+  margin-bottom: 0.4375rem;
+  color: var(--mig-tinta);
+  font-size: 1.09375rem;
+  font-weight: var(--mig-peso-fuerte);
+  line-height: 1.28;
 }
 
 .acceso__texto {
+  margin: 0;
   color: var(--mig-apagado);
-  margin-bottom: 0;
+  font-size: 0.875rem;
+  line-height: 1.56;
 }
 
 .acceso__flecha {
+  flex: none;
   margin-left: auto;
-  color: var(--mig-primario);
+  color: var(--mig-acento);
   transition: transform var(--mig-dur) var(--mig-curva);
 }
 
-.acceso:hover .acceso__flecha {
+.acceso:hover .acceso__flecha,
+.acceso:focus-visible .acceso__flecha {
   transform: translateX(3px);
 }
 
-/* En una sola columna la tarjeta se lee mejor con el icono a la izquierda:
-   ocupa menos alto y el pulgar llega antes al enlace. */
-@media (max-width: 767.98px) {
-  .acceso__cuerpo {
-    display: grid;
-    grid-template-columns: 2.75rem minmax(0, 1fr);
-    column-gap: var(--mig-esp-3);
-    align-items: start;
-    padding: var(--mig-esp-4);
+/* La ayuda urgente ocupa el hueco de la segunda fila y pesa mas: no es una
+   tarjeta mas, es la salida de emergencia. */
+.acceso--ayuda {
+  position: relative;
+  grid-column: span 2;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.25rem;
+  min-height: 0;
+  padding: 1.5rem 5.125rem 1.5rem 1.625rem;
+  border-color: var(--mig-acento-borde);
+  background: linear-gradient(
+    112deg,
+    var(--mig-acento-suave) 0%,
+    var(--mig-calido-durazno) 100%
+  );
+}
+
+.acceso--ayuda:hover,
+.acceso--ayuda:focus-visible {
+  border-color: var(--mig-peligro-borde);
+}
+
+.acceso--ayuda .acceso__tile {
+  width: 4.25rem;
+  height: 4.25rem;
+  margin: 0;
+  border-radius: 1.25rem;
+}
+
+.acceso--ayuda .acceso__icono {
+  width: 3rem;
+  height: 3rem;
+}
+
+.acceso--ayuda .acceso__cuerpo {
+  justify-content: center;
+}
+
+.acceso--ayuda .acceso__titulo {
+  margin-bottom: 0.3125rem;
+  font-size: 1.1875rem;
+}
+
+.acceso--ayuda .acceso__texto {
+  max-width: 54ch;
+}
+
+/* La flecha se ancla al borde derecho sin usar translateY: asi el hover solo
+   mueve el eje X y prefers-reduced-motion no necesita una excepcion. */
+.acceso--ayuda .acceso__flecha {
+  position: absolute;
+  top: calc(50% - 0.5rem);
+  right: 1.875rem;
+  margin: 0;
+}
+
+/* La banda del asistente es el segundo punto de entrada, despues de las
+   tarjetas. Repite la promesa sin registro y no compite con la ayuda urgente. */
+.asistente-banda {
+  display: flex;
+  align-items: center;
+  gap: 1.125rem;
+  margin-top: 1.125rem;
+  padding: 1.25rem 1.375rem;
+  border: 1px solid var(--mig-acento-borde);
+  border-radius: var(--mig-radio-xl);
+  background: radial-gradient(
+      90% 170% at 100% 0%,
+      var(--mig-calido-durazno) 0%,
+      rgb(255 248 242 / 0%) 60%
+    ),
+    linear-gradient(
+      100deg,
+      var(--mig-acento-suave) 0%,
+      var(--mig-calido-durazno) 100%
+    );
+  box-shadow: var(--mig-sombra-sm);
+  color: var(--mig-tinta);
+  text-decoration: none;
+  transition: transform var(--mig-dur) var(--mig-curva),
+    box-shadow var(--mig-dur) var(--mig-curva),
+    border-color var(--mig-dur) var(--mig-curva);
+}
+
+.asistente-banda:hover,
+.asistente-banda:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--mig-peligro-borde);
+  box-shadow: var(--mig-sombra);
+  color: var(--mig-tinta);
+}
+
+.asistente-banda__icono {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 1rem;
+  background: var(--mig-acento);
+  color: var(--mig-blanco);
+  box-shadow: 0 8px 18px rgb(219 48 105 / 22%);
+}
+
+.asistente-banda__texto {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.asistente-banda__texto strong {
+  color: var(--mig-tinta);
+  font-size: var(--mig-texto-base);
+  font-weight: var(--mig-peso-fuerte);
+  line-height: 1.3;
+}
+
+.asistente-banda__texto span {
+  color: var(--mig-apagado);
+  font-size: 0.84375rem;
+  line-height: 1.5;
+}
+
+.asistente-banda__cta {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0.625rem 1.0625rem;
+  border-radius: var(--mig-radio-pill);
+  background: var(--mig-acento);
+  color: var(--mig-blanco);
+  font-size: 0.84375rem;
+  font-weight: var(--mig-peso-fuerte);
+  box-shadow: 0 7px 16px rgb(219 48 105 / 20%);
+  transition: background-color var(--mig-dur-rapida) var(--mig-curva);
+}
+
+.asistente-banda:hover .asistente-banda__cta,
+.asistente-banda:focus-visible .asistente-banda__cta {
+  background: var(--mig-acento-fuerte);
+}
+
+@media (max-width: 860px) {
+  .inicio__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .acceso--ayuda {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 620px) {
+  .inicio__seccion {
+    padding-top: 1.75rem;
+  }
+
+  .inicio__titulo {
+    font-size: 1.5625rem;
+  }
+
+  .inicio__grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .acceso {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.875rem;
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .acceso__tile {
+    width: 3rem;
+    height: 3rem;
+    margin: 0;
+    border-radius: 0.8125rem;
   }
 
   .acceso__icono {
-    grid-row: 1 / span 2;
-    width: 2.75rem;
-    height: 2.75rem;
-    margin-bottom: 0;
+    width: 2.125rem;
+    height: 2.125rem;
   }
 
-  .acceso__titulo,
+  .acceso__titulo {
+    font-size: var(--mig-texto-base);
+  }
+
   .acceso__texto {
-    grid-column: 2;
+    font-size: var(--mig-texto-xs);
+  }
+
+  .acceso__flecha {
+    display: none;
+  }
+
+  .acceso--ayuda {
+    grid-column: span 1;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .acceso--ayuda .acceso__tile {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.8125rem;
+  }
+
+  .acceso--ayuda .acceso__icono {
+    width: 2.125rem;
+    height: 2.125rem;
+  }
+
+  .acceso--ayuda .acceso__titulo {
+    font-size: var(--mig-texto-base);
+  }
+
+  .asistente-banda {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .asistente-banda__icono {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.875rem;
+  }
+
+  .asistente-banda__texto {
+    flex-basis: calc(100% - 3.625rem);
+  }
+
+  .asistente-banda__cta {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -1853,6 +2497,10 @@ a.bloque__fila:focus-visible {
   .acceso:hover,
   .acceso:focus-visible,
   .acceso:active,
+  .boton--acento:hover,
+  .boton--acento:focus-visible,
+  .asistente-banda:hover,
+  .asistente-banda:focus-visible,
   .linea-ayuda:hover,
   .linea-ayuda:focus-visible,
   .menu__enlace:hover::after {
@@ -1860,6 +2508,10 @@ a.bloque__fila:focus-visible {
   }
 
   .acceso:hover .acceso__flecha,
+  .acceso:focus-visible .acceso__flecha {
+    transform: none;
+  }
+
   .menu__enlace:hover::after {
     transform: scaleX(1);
   }
